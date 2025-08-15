@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+@theme{
+    --color-yellow: #FFDA32;
+    --color-teal: #7BBCB0;
+    --color-blueBlack: #1C2B38;
+    --color-gray: #495560;
+    --color-darkBlue: #13253F;
+    --font-volkhov: "Volkhov", serif;
+    --font-mulish: "Mulish", sans-serif;
+}
