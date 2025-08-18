@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 export default function PromoSection(){
     const [promos, setPromos] = useState([])
@@ -37,8 +38,19 @@ export default function PromoSection(){
     },[])
 
     return (
-        <section>
-            <h2 className="text-2xl font-bold mb-6">Promo Highlights</h2>
+        <section className="flex flex-col gap-6">
+            <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Promo Highlights</h2>
+                    <p className="text-base font-semibold text-[#778088]">Travel more, spend less - book your getaway today.</p>
+                </div>
+                <Link 
+                    to="detail-promo/:id"
+                    className="w-fit bg-[#495560] py-4 px-10 text-sm font-bold text-white self-end rounded-sm"
+                    >
+                        View All Promos
+                </Link>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {promos.map((promo) => (
                     <div 

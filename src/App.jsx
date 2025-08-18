@@ -4,6 +4,7 @@ import { Toaster } from 'sonner'
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import DetailDestinationPage from "./pages/DetailDestinationPage"
+import DetailPromoPage from "./pages/DetailPromoPage"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signin" element={<LoginPage />}></Route>
           <Route path="/signup" element={<RegisterPage />}></Route>
           <Route path="/detail-destination/:id" element={<DetailDestinationPage />}></Route>
+          <Route path="/detail-promo/:id" element={<DetailPromoPage />}></Route>
         </Routes>
       </BrowserRouter>
       <Toaster position="bottom-right" richColors expand={true} />

@@ -15,7 +15,13 @@ export default function FeaturedSection(){
                 }
             )
             console.log(res);
-            setDestinations(res.data.data)
+            const sortDest = res.data.data.filter(
+                (promo, index, self) =>
+                    index === self.findIndex((p) => p.title.trim() === promo.title.trim())
+            )
+
+            const shuffled = sortDest.sort(() => 0.5 - Math.random())
+            setDestinations(shuffled.slice(0,5))
         } catch (error) {
             console.log(error);
         }
@@ -26,14 +32,18 @@ export default function FeaturedSection(){
     },[])
 
     return (
-        <section>
-            <h2 className="text-2xl font-bold mb-6">Featured Destinations</h2>
-            <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto">
+        <section className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+                <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Featured Destinations</h2>
+                <p className="text-base font-semibold text-[#778088]">Where will your next adventure take you?</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar">
                 {destinations.map((dest) => (
-                    <div key={dest?.id} className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0">
+                    <div key={dest?.id} className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0 ">
                         <img 
                             src={dest.imageUrls?.find(url => url && url.trim() !== '') || "/placeholder.jpg"} 
                             alt={dest.title} 
+                            // onError={}
                             className="w-full h-48 object-cover p-2"/>
                         <div className="flex flex-col gap-2 p-4">
                             <h3 className="font-normal font-volkhov font-base text-blueBlack">{dest.title}</h3>

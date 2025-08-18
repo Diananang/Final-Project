@@ -15,16 +15,7 @@ export default function PopularSection(){
                 }
             )
             console.log(res);
-            
-            let data = res.data.data
-
-            const uniqueCities = Array.from(
-                new Map(data.map((item) => [item.name, item])).values()
-            )
-
-            const shuffled = uniqueCities.sort(() => Math.random() - 0.5)
-            const selected = shuffled.slice(0 , 8)
-            setPopular(selected)
+            setPopular(res.data.data)
         } catch (error) {
             console.log(error);
         }
@@ -35,14 +26,16 @@ export default function PopularSection(){
     },[])
 
     return (
-        <section>
-            <h2 className="text-2xl font-bold mb-6">Explore Popular Cities</h2>
-            <div className="flex flex-col sm:flex-row justify-between gap-2">
+        <section className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+                <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Explore Popular Cities</h2>
+                <p className="text-base font-semibold text-[#778088]">From vibrant streets to hidden gems—start your journey here.</p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar">
                 {popular.map((pop) => (
-                    <div key={pop?.id} className="border border-teal rounded-[30px] py-3 px-8 text-[#495560] text-center text-sm font-bold cursor-pointer hover:bg-teal hover:text-white transition">
+                    <div key={pop?.id} className="flex-shrink-0 snap-start border border-teal rounded-[30px] py-3 px-8 min-w-[150px] text-[#495560] text-center text-sm font-bold cursor-pointer hover:bg-teal hover:text-white transition">
                         <p>{pop.name}</p>
                     </div>
-
                 ))}
             </div>
         </section>

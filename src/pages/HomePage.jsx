@@ -13,7 +13,7 @@ export default function HomePage(){
             <Navbar />
             <Banner />
 
-            <div className="px-6 md:px-12 lg:px-24 space-y-20 mt-28">
+            <div className="px-6 md:px-12 lg:px-24 space-y-16 mt-28 font-mulish">
                 <PromoSection />
                 <PopularSection />
                 <FeaturedSection />
