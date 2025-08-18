@@ -37,7 +37,7 @@ export default function FeaturedSection(){
                 <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Featured Destinations</h2>
                 <p className="text-base font-semibold text-[#778088]">Where will your next adventure take you?</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar">
+            <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-2">
                 {destinations.map((dest) => (
                     <div key={dest?.id} className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0 ">
                         <img 
