@@ -3,7 +3,7 @@ import image from '../assets/hero.jpg'
 import { useState } from "react";
 import Footer from "../component/Footer";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';
 
 
@@ -14,15 +14,29 @@ export default function RegisterPage(){
     const [passwordRepeat, setPassRepeat] = useState('')
     const [role, setRole] = useState('userx')
     const navigate = useNavigate()
-    const [selectedImage, setSelectedImage] = useState(null)
 
     const changeName = ((e) => setName(e.target.value))
     const changeEmail = ((e) => setEmail(e.target.value))
     const changePass = ((e) => setPassword(e.target.value))
     const changeConfirmPass = ((e) => setPassRepeat(e.target.value))
     const changeRole = ((e) => setRole(e.target.value))
+    const [isError, setIsError] = useState(false)
 
     const handleRegister = async () => {
+        if (!name.trim() || !email.trim() || !password.trim() || !passwordRepeat.trim()) {
+            setIsError(true)
+            toast.error("Please fill all fields")
+            return
+        }
+
+        if (password !== passwordRepeat) {
+            setIsError(true)
+            toast.error("Passwords do not match")
+            return
+        }
+
+        setIsError(false)
+
         const payload = {
             name,
             email,
@@ -45,15 +59,9 @@ export default function RegisterPage(){
             navigate('/signin')
         } catch (error) {
             console.log(error);
+            toast.error("Sign up failed: " + (error.response?.data?.message || "Something went wrong"))
         }
     }
-
-    // const handleImageChange = (e) =>{
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         setSelectedImage(URL.createObjectURL(file));
-    //     }
-    // }
 
     return(
         <div>
@@ -74,14 +82,14 @@ export default function RegisterPage(){
                                 placeholder="Enter Username"
                                 value={name}
                                 onChange={changeName}
-                                className="border mb-6 py-4 px-6 rounded-lg border-yellow"
+                                className={`border mb-6 py-4 px-6 rounded-lg ${isError && !name.trim() ? "border-red-500" : "border-yellow"}`}
                             />
                             <input 
                                 type="email" 
                                 placeholder="Enter Email"
                                 value={email}
                                 onChange={changeEmail}
-                                className="border mb-6 py-4 px-6 rounded-lg border-yellow"
+                                className={`border mb-6 py-4 px-6 rounded-lg ${isError && !email.trim() ? "border-red-500" : "border-yellow"}`}
                             />
                         </div>
                         <input 
@@ -89,14 +97,14 @@ export default function RegisterPage(){
                             placeholder="Enter Password"
                             value={password}
                             onChange={changePass}
-                            className="border py-4 mb-6 px-6 rounded-lg border-yellow"
+                            className={`border py-4 mb-6 px-6 rounded-lg ${isError && !password.trim() ? "border-red-500" : "border-yellow"}`}
                         />
                         <input 
                             type="password" 
                             placeholder="Confirm Password"
                             value={passwordRepeat}
                             onChange={changeConfirmPass}
-                            className="border py-4 mb-6 px-6 rounded-lg border-yellow"
+                            className={`border py-4 mb-6 px-6 rounded-lg ${isError && (!passwordRepeat.trim() || password !== passwordRepeat) ? "border-red-500" : "border-yellow"}`}
                         />
                         <select 
                             value={role}
@@ -106,19 +114,6 @@ export default function RegisterPage(){
                             <option value="user">User</option>
                             <option value="admin">Admin</option>
                         </select>
-                        {/* <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="mb-6"
-                        />
-                        {selectedImage && (
-                            <img 
-                                src={selectedImage} 
-                                alt="Preview" 
-                                className="w-32 h-32 object-cover rounded-full border-yellow mb-6"
-                            />
-                        )} */}
                     </div>
                     <button 
                         type="submit"
@@ -127,7 +122,7 @@ export default function RegisterPage(){
                         >
                             CREATE ACCOUNT
                     </button>
-                    <p>Already have an account? Sign In</p>
+                    <p>Already have an account? <Link to='/signin' className="text-teal hover:text-teal/80">Sign In</Link></p>
                 </div>
             </div>
             <Footer />

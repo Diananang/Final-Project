@@ -3,19 +3,28 @@ import image from '../assets/hero.jpg'
 import Footer from "../component/Footer";
 import { useState } from "react";
 import axios from'axios'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';
 
 
 export default function LoginPage(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isError, setIsError] = useState(false)
     const navigate = useNavigate()
 
     const changeEmail = ((e) => setEmail(e.target.value))
     const changePass = ((e) => setPassword(e.target.value))
 
     const handleLogin = async () => {
+        if (!email.trim() || !password.trim()) {
+        setIsError(true)
+        toast.error("Please fill all fields")
+        return
+    }
+
+    setIsError(false)
+
         const payload = {
             email,
             password,
@@ -57,14 +66,14 @@ export default function LoginPage(){
                         <input 
                             type="email" 
                             placeholder="Enter Email or Username"
-                            className="border mb-6 py-4 px-6 rounded-lg border-yellow"
+                            className={`border mb-6 py-4 px-6 rounded-lg ${isError && !email.trim() ? "border-red-500" : "border-yellow"}`}
                             value={email}
                             onChange={changeEmail}
                         />
                         <input 
                             type="password" 
                             placeholder="Enter Password"
-                            className="border py-4 px-6 rounded-lg border-yellow"
+                            className={`border mb-6 py-4 px-6 rounded-lg ${isError && !password.trim() ? "border-red-500" : "border-yellow"}`}
                             value={password}
                             onChange={changePass}
                         />
@@ -77,7 +86,7 @@ export default function LoginPage(){
                         >
                             SIGN IN
                     </button>
-                    <p>Don't have account? Sign Up</p>
+                    <p>Don't have account? <Link to='/signup' className="text-teal hover:text-teal/80">Sign Up</Link></p>
                 </div>
             </div>
             <Footer />

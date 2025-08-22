@@ -5,6 +5,8 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import DetailDestinationPage from "./pages/DetailDestinationPage"
 import DetailPromoPage from "./pages/DetailPromoPage"
+import Checkout from "./pages/Checkout"
+import ProtectedRoute from "./component/ProtectToken"
 
 function App() {
 
@@ -17,6 +19,7 @@ function App() {
           <Route path="/signup" element={<RegisterPage />}></Route>
           <Route path="/detail-destination/:id" element={<DetailDestinationPage />}></Route>
           <Route path="/detail-promo/:id" element={<DetailPromoPage />}></Route>
+          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}></Route>
         </Routes>
       </BrowserRouter>
       <Toaster position="bottom-right" richColors expand={true} />

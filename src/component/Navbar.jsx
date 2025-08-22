@@ -6,20 +6,7 @@ export default function Navbar ({authOnly = false}) {
             <nav className="flex justify-between py-5 px-10 text-white">
                 <Link to="/" className={`text-[26px] font-bold ${authOnly ? "text-blueBlack" : "text-white"}`}>Roamly</Link>
                 {authOnly ? (
-                    <div className="flex gap-6 ">
-                        <Link 
-                            to="/signin"
-                            className="bg-yellow py-[14px] px-[43px] rounded-[3px] text-blueBlack font-extrabold"
-                        >
-                            Sign In
-                        </Link>
-                        <Link 
-                            to="/signup"
-                            className="bg-blueBlack py-[14px] px-[43px] rounded-[3px] text-white font-extrabold"
-                        >
-                            Sign Up
-                        </Link>
-                    </div>
+                    <div className="flex gap-6 "></div>
 
                 ) : (
                     <div className="flex gap-10 items-center font-mulish">
@@ -27,6 +14,7 @@ export default function Navbar ({authOnly = false}) {
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="/about">About us</Link></li>
                             <li><Link to="/popular-destinations">Popular Destinations</Link></li>
+                            <li><Link to="/checkout">Cart</Link></li>
                         </ul>
                         <Link 
                             to="/signin"

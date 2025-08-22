@@ -1,8 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import DestinationCard from "../component/DestinationsCard";
+import { useNavigate } from "react-router-dom"
+import { toast} from 'sonner';
 
 export default function FeaturedSection(){
     const [destinations, setDestinations] = useState([])
+    const navigate = useNavigate()
 
     const getDestinations = async () => {
         try {
@@ -27,6 +31,38 @@ export default function FeaturedSection(){
         }
     }
 
+    const handleImageError = (e) => {
+        e.target.src = "/placeholder.jpg";
+    };
+
+    const handleAddToCart = async (activityId) => {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            navigate('/signin')
+            return
+        }
+
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/api/v1/add-cart`,
+                {activityId},
+                {
+                    headers: {
+                        apikey: import.meta.env.VITE_API_KEY,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            )
+            console.log(res);
+            toast.success(res.data.message)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
     useEffect(() => {
         getDestinations();
     },[])
@@ -39,20 +75,12 @@ export default function FeaturedSection(){
             </div>
             <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-2">
                 {destinations.map((dest) => (
-                    <div key={dest?.id} className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0 ">
-                        <img 
-                            src={dest.imageUrls?.find(url => url && url.trim() !== '') || "/placeholder.jpg"} 
-                            alt={dest.title} 
-                            // onError={}
-                            className="w-full h-48 object-cover p-2"/>
-                        <div className="flex flex-col gap-2 p-4">
-                            <h3 className="font-normal font-volkhov font-base text-blueBlack">{dest.title}</h3>
-                            <p className="text-sm text-gray-600">{dest.city}</p>
-                            <p className="text-sm text-gray-600">Rate: {dest.rating}</p>
-                            <p className="text-sm text-gray-600">{dest.total_reviews} reviews</p>
-                            <p className="mt-1 font-semibold text-yellow-600">Rp {dest.price.toLocaleString()}</p>
-                        </div>
-                    </div>
+                    <DestinationCard 
+                        key={dest.id}
+                        destination={dest}
+                        onAddToCart={handleAddToCart}
+                        onImageError={handleImageError}
+                    />
                 ))}
             </div>
         </section>
