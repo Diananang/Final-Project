@@ -1,11 +1,11 @@
 import Navbar from "../component/Navbar";
 import Banner from "../component/Banner";
-import PromoSection from "../section/PromoSection";
-import TestimonialSection from "../section/TestimonialSection";
-import NewsletterSection from "../section/NewsletterSection";
+import PromoSection from "./section/PromoSection";
+import TestimonialSection from "./section/TestimonialSection";
+import NewsletterSection from "./section/NewsletterSection";
 import Footer from "../component/Footer";
-import PopularSection from "../section/PopularSection";
-import FeaturedSection from "../section/FeaturedDestinationsSection";
+import PopularSection from "./section/PopularSection";
+import FeaturedSection from "./section/FeaturedDestinationsSection";
 
 export default function HomePage(){
     return (

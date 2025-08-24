@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import DestinationCard from "../component/DestinationsCard";
 import { useNavigate } from "react-router-dom"
 import { toast} from 'sonner';
+import DestinationCard from "../../component/DestinationsCard";
 
 export default function FeaturedSection(){
     const [destinations, setDestinations] = useState([])
