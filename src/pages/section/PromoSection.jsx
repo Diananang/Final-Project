@@ -45,7 +45,7 @@ export default function PromoSection(){
                     <p className="text-base font-semibold text-[#778088]">Travel more, spend less - book your getaway today.</p>
                 </div>
                 <Link 
-                    to="detail-promo/:id"
+                    to="/all-promos"
                     className="w-fit bg-[#495560] py-4 px-10 text-sm font-bold text-white self-end rounded-sm"
                     >
                         View All Promos
@@ -63,7 +63,10 @@ export default function PromoSection(){
                             onError={handleImageError}
                         />
                         <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-4 text-white">
-                            <a className="absolute top-3 right-3 flex items-center gap-1 self-end text-sm text-gray-100 hover:text-gray-200 ">
+                            <Link 
+                                to={`/detail-promo/${promo.id}`}
+                                className="absolute top-3 right-3 flex items-center gap-1 self-end text-sm text-gray-100 hover:text-gray-200 "
+                                >
                                 View Promo
                                 <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +82,7 @@ export default function PromoSection(){
                                     d="M17.25 6.75L6.75 17.25M17.25 6.75H7.5m9.75 0V16.5"
                                     />
                                 </svg>
-                            </a>
+                            </Link>
                             <h3 className="font-bold text-lg mb-1">{promo.title}</h3>
                             <p className="text-sm text-gray-200 mb-3">{promo.description.slice(0,80)}...</p>
                         </div>

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function DestinationCard({ destination, onAddToCart, onImageError }) {
   return (
     <div className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0">
@@ -16,15 +18,12 @@ export default function DestinationCard({ destination, onAddToCart, onImageError
             <p className="mt-1 font-semibold text-yellow-600">
             Rp {destination.price.toLocaleString()}
             </p>
-
-            {onAddToCart && (
-            <button
-                onClick={() => onAddToCart(destination.id)}
+            <Link
+                to={`/detail-destination/${destination.id}`}
                 className="mt-auto bg-teal hover:bg-teal/80 text-white text-sm py-2 px-4 rounded"
             >
-                Add to Cart
-            </button>
-            )}
+                Detail
+            </Link>
         </div>
       </div>
     </div>

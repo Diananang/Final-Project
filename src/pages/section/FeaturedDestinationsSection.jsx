@@ -35,33 +35,33 @@ export default function FeaturedSection(){
         e.target.src = "/placeholder.jpg";
     };
 
-    const handleAddToCart = async (activityId) => {
-        const token = localStorage.getItem('token')
+    // const handleAddToCart = async (activityId) => {
+    //     const token = localStorage.getItem('token')
 
-        if (!token) {
-            navigate('/signin')
-            return
-        }
+    //     if (!token) {
+    //         navigate('/signin')
+    //         return
+    //     }
 
-        try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/add-cart`,
-                {activityId},
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY,
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            )
-            console.log(res);
-            toast.success(res.data.message)
+    //     try {
+    //         const res = await axios.post(
+    //             `${import.meta.env.VITE_BASE_URL}/api/v1/add-cart`,
+    //             {activityId},
+    //             {
+    //                 headers: {
+    //                     apikey: import.meta.env.VITE_API_KEY,
+    //                     Authorization: `Bearer ${localStorage.getItem("token")}`
+    //                 }
+    //             }
+    //         )
+    //         console.log(res);
+    //         toast.success(res.data.message)
             
-        } catch (error) {
-            console.log(error);
+    //     } catch (error) {
+    //         console.log(error);
             
-        }
-    }
+    //     }
+    // }
 
     useEffect(() => {
         getDestinations();
@@ -78,7 +78,6 @@ export default function FeaturedSection(){
                     <DestinationCard 
                         key={dest.id}
                         destination={dest}
-                        onAddToCart={handleAddToCart}
                         onImageError={handleImageError}
                     />
                 ))}
