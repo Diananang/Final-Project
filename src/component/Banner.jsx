@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import axios from 'axios'
 import SearchBar from "./SearchBar"
 
-export default function Banner(){
-    const [banner, setBanner] = useState(null)
+export default function Banner({onSearch}){
+    const [banner, setBanner] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     const getBanner = async() => {
         try {
@@ -16,7 +17,7 @@ export default function Banner(){
                 }
             )
             console.log(res);
-            setBanner(res.data.data[4])
+            setBanner(res.data.data)
         } catch (error) {
             console.log(error);
         }
@@ -26,12 +27,21 @@ export default function Banner(){
         getBanner();
     },[])
 
+    useEffect(() => {
+        if (banner.length === 0) return;
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % banner.length)
+        }, 10000);
+        return () => clearInterval(interval);
+    },[banner])
+
     return(
         <div className="relative w-full h-[90vh]">
-            {banner && (
+            {banner.length > 0 && (
                 <img 
-                src={banner.imageUrl} 
-                alt={banner.name} 
+                src={banner[currentIndex].imageUrl} 
+                alt={banner[currentIndex].name} 
                 className="absolute inset-0 w-full h-full object-cover object-center"
                 />
             )}
@@ -46,7 +56,18 @@ export default function Banner(){
                 </p>
             </div>
             <div className="absolute bottom-[-45px] left-1/2 -translate-x-1/2 z-30">
-                <SearchBar />
+                <SearchBar onSearch={onSearch}/>
+            </div>
+
+            <div>
+                {banner.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-all ${currentIndex === index ? "bg-white" : "bg-white/50"}`}
+                    >
+                    </button>
+                ))}
             </div>
         </div>
     )

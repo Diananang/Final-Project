@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function DestinationCard({ destination, onAddToCart, onImageError }) {
+export default function DestinationCard({ destination, onAddToCart, onImageError, isDetailPage = false }) {
+
   return (
     <div className="bg-white w-[270px] h-96 shadow rounded-sm overflow-hidden flex-shrink-0">
       <img
@@ -16,14 +18,24 @@ export default function DestinationCard({ destination, onAddToCart, onImageError
         <p className="text-sm text-gray-600">{destination.total_reviews} reviews</p>
         <div className="flex justify-between">
             <p className="mt-1 font-semibold text-yellow-600">
-            Rp {destination.price.toLocaleString()}
+            Rp {destination.price?.toLocaleString()}
             </p>
-            <Link
-                to={`/detail-destination/${destination.id}`}
-                className="mt-auto bg-teal hover:bg-teal/80 text-white text-sm py-2 px-4 rounded"
-            >
-                Detail
-            </Link>
+            {!isDetailPage ? (
+              <Link
+                  to={`/detail-destination/${destination.id}`}
+                  className="mt-auto bg-teal hover:bg-teal/80 text-white text-sm py-2 px-4 rounded"
+              >
+                  Detail
+              </Link>
+              
+            ) : (
+              <button
+                  onClick={() => onAddToCart(destination.id)}
+                  className="mt-auto bg-teal hover:bg-teal/80 text-white text-sm py-2 px-4 rounded"
+              >
+                  Add to Cart
+              </button>
+            )}
         </div>
       </div>
     </div>

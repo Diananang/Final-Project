@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast} from 'sonner';
 import DestinationCard from "../../component/DestinationsCard";
+import { Link } from 'react-router-dom'
 
 export default function FeaturedSection(){
     const [destinations, setDestinations] = useState([])
@@ -20,8 +21,8 @@ export default function FeaturedSection(){
             )
             console.log(res);
             const sortDest = res.data.data.filter(
-                (promo, index, self) =>
-                    index === self.findIndex((p) => p.title.trim() === promo.title.trim())
+                (dest, index, self) =>
+                    index === self.findIndex((p) => p.title.trim() === dest.title.trim())
             )
 
             const shuffled = sortDest.sort(() => 0.5 - Math.random())
@@ -35,43 +36,23 @@ export default function FeaturedSection(){
         e.target.src = "/placeholder.jpg";
     };
 
-    // const handleAddToCart = async (activityId) => {
-    //     const token = localStorage.getItem('token')
-
-    //     if (!token) {
-    //         navigate('/signin')
-    //         return
-    //     }
-
-    //     try {
-    //         const res = await axios.post(
-    //             `${import.meta.env.VITE_BASE_URL}/api/v1/add-cart`,
-    //             {activityId},
-    //             {
-    //                 headers: {
-    //                     apikey: import.meta.env.VITE_API_KEY,
-    //                     Authorization: `Bearer ${localStorage.getItem("token")}`
-    //                 }
-    //             }
-    //         )
-    //         console.log(res);
-    //         toast.success(res.data.message)
-            
-    //     } catch (error) {
-    //         console.log(error);
-            
-    //     }
-    // }
-
     useEffect(() => {
         getDestinations();
     },[])
 
     return (
         <section className="flex flex-col gap-6">
-            <div className="flex flex-col gap-4">
-                <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Featured Destinations</h2>
-                <p className="text-base font-semibold text-[#778088]">Where will your next adventure take you?</p>
+            <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Featured Destinations</h2>
+                    <p className="text-base font-semibold text-[#778088]">Where will your next adventure take you?</p>
+                </div>
+                <Link 
+                        to="/all-destinations"
+                        className="w-fit bg-[#495560] py-4 px-10 text-sm font-bold text-white self-end rounded-sm"
+                        >
+                            View All Destinations
+                </Link>
             </div>
             <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-2">
                 {destinations.map((dest) => (

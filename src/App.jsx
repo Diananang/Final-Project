@@ -8,6 +8,8 @@ import DetailPromoPage from "./pages/DetailPromoPage"
 import Checkout from "./pages/Checkout"
 import ProtectedRoute from "./component/ProtectToken"
 import AdminPage from "./pages/admin/AdminPage"
+import AllDestinationsPage from "./pages/AllDestinationsPage"
+import AllPromosPage from "./pages/AllPromosPage"
 
 function App() {
 
@@ -19,7 +21,9 @@ function App() {
           <Route path="/signin" element={<LoginPage />}></Route>
           <Route path="/signup" element={<RegisterPage />}></Route>
           <Route path="/detail-destination/:id" element={<DetailDestinationPage />}></Route>
+          <Route path="/all-destinations" element={<AllDestinationsPage />}></Route>
           <Route path="/detail-promo/:id" element={<DetailPromoPage />}></Route>
+          <Route path="/all-promos" element={<AllPromosPage />}></Route>
           <Route path="/admin" element={<AdminPage />}></Route>
           <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}></Route>
         </Routes>

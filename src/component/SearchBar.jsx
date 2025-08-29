@@ -1,55 +1,27 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
-export default function SearchBar(){
-    const [categories, setCategories] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState("")
-    const navigate = useNavigate()
+export default function SearchBar({onSearch}){
+    const [keyword, setKeyword] = useState("")
 
-    const getCategories = async (categoryId) => {
-        try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/categories`,
-                {
-                    headers: { apikey: import.meta.env.VITE_API_KEY }
-                }
-            )
-            setCategories(res.data.data)
-        } catch (error) {
-            console.log(error)
-        }
+    const handleSearch = () => {
+        if (!keyword.trim()) return;
+        onSearch(keyword)
     }
-
-    useEffect(() => {
-        getCategories();
-    },[])
-
-    // const handleSearch = () => {
-    //     if (!selectedCategory) return
-    //     navigate(`/activities/${selectedCategory}`)
-    // }
 
     return (
         <div className="w-[1000px] max-w-full h-[90px] flex justify-between items-center rounded-[10px] shadow p-5 font-mulish bg-white/90 backdrop-blur-sm">
-            <div className="flex flex-col">
-                <p className="text-[15px] font-extrabold text-teal">Location</p>
-                <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="text-sm text-gray-700 mt-1 rounded-md px-3 py-1"
-                >
-                    <option value="">Pilih Kota</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                            {cat.name}
-                        </option>
-                    ))}
-                </select>
+            <div className="flex flex-col flex-1">
+                <input 
+                    type="text" 
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="Search anything..."
+                    className="text-sm text-gray-700 mt-1 rounded-md px-3 py-2 border border-gray-300"
+                />
             </div>
             <button 
-                // onClick={handleSearch}
-                className="bg-yellow rounded-[40px] font-extrabold text-blueBlack text-base py-4 px-12 shadow-lg shadow-yellow/50"
+                onClick={handleSearch}
+                className="ml-4 bg-yellow rounded-[40px] font-extrabold text-blueBlack text-base py-4 px-12 shadow-lg shadow-yellow/50"
             >
                 Search
             </button>
