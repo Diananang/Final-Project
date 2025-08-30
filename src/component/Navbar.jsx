@@ -1,6 +1,7 @@
 import { ShoppingCart } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
+import CartPage from "../pages/CartPage";
 
 export default function Navbar ({authOnly = false}) {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function Navbar ({authOnly = false}) {
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="/about">About us</Link></li>
                             <li><Link to="/all-destinations">All Destinations</Link></li>
-                            <li><Link to="/cart"><ShoppingCart /></Link></li>
+                            <li><Link to="/cart"><CartPage /></Link></li>
                         </ul>
 
                         {token ? (
