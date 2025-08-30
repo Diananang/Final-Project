@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 export default function Aside ({activeMenu, setActiveMenu}) {
+    const navigate = useNavigate();
     
     const menus = [
     { id: "dashboard", label: "Dashboard" },
@@ -10,6 +12,15 @@ export default function Aside ({activeMenu, setActiveMenu}) {
     { id: "logout", label: "Logout" },
     ]
 
+    const handleLogout = (id) => {
+    if (id === "logout") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      navigate("/");
+    } else {
+      setActiveMenu(id);
+    }
+  };
     return (
         <aside className="bg-white shadow-md w-64 p-4 text-blueBlack">
             <h2 className="text-3xl font-bold">Roamly</h2>
@@ -17,7 +28,7 @@ export default function Aside ({activeMenu, setActiveMenu}) {
                 {menus.map((menu) => (
                     <button
                         key={menu.id}
-                        onClick={() => setActiveMenu(menu.id)}
+                        onClick={() => handleLogout(menu.id)}
                         className={`block w-full text-left p-2 rounded-lg transition-colors
                         ${
                             activeMenu === menu.id

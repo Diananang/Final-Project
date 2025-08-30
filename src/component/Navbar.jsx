@@ -1,3 +1,4 @@
+import { ShoppingCart } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
 
@@ -8,6 +9,7 @@ export default function Navbar ({authOnly = false}) {
 
     const handleSignOut = () => {
         localStorage.removeItem('token')
+        localStorage.removeItem('role')
         navigate('/')
         toast.success('Sign Out Succesfully')
     }
@@ -21,7 +23,7 @@ export default function Navbar ({authOnly = false}) {
             <nav className="flex justify-between py-5 px-10 text-white">
                 <Link 
                     to="/" 
-                    className={`text-[26px] font-bold 
+                    className={`text-[26px] font-bold font-volkhov
                         ${isHome && !authOnly ? "text-white" : "text-blueBlack"}`}
                 >
                     Roamly
@@ -35,8 +37,8 @@ export default function Navbar ({authOnly = false}) {
                             ${isHome ? "text-white" : "text-blueBlack"}`}>
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="/about">About us</Link></li>
-                            <li><Link to="/popular-destinations">Popular Destinations</Link></li>
-                            <li><Link to="/checkout">Cart</Link></li>
+                            <li><Link to="/all-destinations">All Destinations</Link></li>
+                            <li><Link to="/cart"><ShoppingCart /></Link></li>
                         </ul>
 
                         {token ? (

@@ -3,7 +3,7 @@ import image from '../assets/hero.jpg'
 import Footer from "../component/Footer";
 import { useState } from "react";
 import axios from'axios'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';
 
 
@@ -12,18 +12,19 @@ export default function LoginPage(){
     const [password, setPassword] = useState('')
     const [isError, setIsError] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
 
     const changeEmail = ((e) => setEmail(e.target.value))
     const changePass = ((e) => setPassword(e.target.value))
 
     const handleLogin = async () => {
         if (!email.trim() || !password.trim()) {
-        setIsError(true)
-        toast.error("Please fill all fields")
-        return
-    }
+            setIsError(true)
+            toast.error("Please fill all fields")
+            return
+        }
 
-    setIsError(false)
+        setIsError(false)
 
         const payload = {
             email,
@@ -41,9 +42,18 @@ export default function LoginPage(){
             )
             console.log(res);
             toast.success("Sign in Succesfully")
+
             const token = await res.data.token
+            const role = res.data.data.role
+
             localStorage.setItem("token", token)
-            navigate("/")
+            localStorage.setItem("role", role)
+            
+            if (role === "admin") {
+                navigate("/admin", { replace: true })
+            } else {
+                navigate("/", { replace: true })
+            }
         } catch (error) {
             console.log(error.response?.data.message);
             toast.error("Sign in failed: " + error.response?.data.message)
