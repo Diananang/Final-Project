@@ -23,6 +23,9 @@ export default function Banner({onSearch}){
         }
     }
 
+    const handleImageError = (e) => {
+        e.target.src = "/placeholder.jpg";
+    }
     useEffect(() => {
         getBanner();
     },[])
@@ -64,6 +67,7 @@ export default function Banner({onSearch}){
                     <button
                         key={index}
                         onClick={() => setCurrentIndex(index)}
+                        onError={handleImageError}
                         className={`w-3 h-3 rounded-full transition-all ${currentIndex === index ? "bg-white" : "bg-white/50"}`}
                     >
                     </button>

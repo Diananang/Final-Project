@@ -28,6 +28,7 @@ function App() {
           <Route path="/all-promos" element={<AllPromosPage />}></Route>
           
           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}></Route>
+          
           <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>}></Route>
           <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}></Route>
           <Route path="/upload-payment-proof" element={<ProtectedRoute><UploadPaymentProof /></ProtectedRoute>}></Route>
