@@ -1,6 +1,6 @@
-import Navbar from "../component/Navbar";
-import image from '../assets/hero.jpg'
-import Footer from "../component/Footer";
+import Navbar from "../../component/Navbar";
+import image from '../../assets/hero.jpg'
+import Footer from "../../component/Footer";
 import { useState } from "react";
 import axios from'axios'
 import { Link, useLocation, useNavigate } from "react-router-dom";

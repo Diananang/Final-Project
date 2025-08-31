@@ -1,15 +1,14 @@
-import Navbar from "../component/Navbar";
-import Banner from "../component/Banner";
-import PromoSection from "./section/PromoSection";
-import TestimonialSection from "./section/TestimonialSection";
-import Footer from "../component/Footer";
-import PopularSection from "./section/PopularSection";
-import FeaturedSection from "./section/FeaturedDestinationsSection";
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import Banner from "../component/Banner";
+import Navbar from '../component/Navbar'
 import DestinationCard from "../component/DestinationsCard";
-
+import PromoSection from "./promos/PromoSection";
+import PopularSection from "./homesections/PopularSection";
+import FeaturedSection from "./destinations/FeaturedDestinationsSection";
+import TestimonialSection from "./homesections/TestimonialSection";
+import Footer from "../component/Footer";
 
 export default function HomePage(){
     const [searchResults, setSearchResults] = useState([]);

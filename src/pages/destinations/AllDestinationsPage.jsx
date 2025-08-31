@@ -2,8 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast} from 'sonner';
-import DestinationCard from "../component/DestinationsCard";
-import Navbar from "../component/Navbar";
+import DestinationCard from "../../component/DestinationsCard";
+import Navbar from "../../component/Navbar";
 
 export default function AllDestinationsPage() {
     const [allDest, setAllDest] = useState([])

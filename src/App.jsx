@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import HomePage from "./pages/HomePage"
 import { Toaster } from 'sonner'
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
-import DetailDestinationPage from "./pages/DetailDestinationPage"
-import DetailPromoPage from "./pages/DetailPromoPage"
-import ProtectedRoute from "./component/ProtectToken"
+import LoginPage from "./pages/authentication/LoginPage"
+import RegisterPage from "./pages/authentication/RegisterPage"
+import DetailDestinationPage from "./pages/destinations/DetailDestinationPage"
+import AllDestinationsPage from "./pages/destinations/AllDestinationsPage"
+import DetailPromoPage from "./pages/promos/DetailPromoPage"
+import AllPromosPage from "./pages/promos/AllPromosPage"
 import AdminPage from "./pages/admin/AdminPage"
-import AllDestinationsPage from "./pages/AllDestinationsPage"
-import AllPromosPage from "./pages/AllPromosPage"
-import CartPage from "./pages/CartPage"
-import Checkout from "./pages/CheckoutPage"
-import UploadPaymentProof from "./pages/PaymentProof"
+import CartPage from "./pages/transactions/CartPage"
+import Checkout from "./pages/transactions/CheckoutPage"
+import UploadPaymentProof from "./pages/transactions/PaymentProof"
+import ProtectedRoute from "./component/ProtectToken"
 
 function App() {
 

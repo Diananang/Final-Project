@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../component/Navbar";
+import Navbar from "../../component/Navbar";
 import { toast } from "sonner";
 
 export default function UploadPaymentProof() {

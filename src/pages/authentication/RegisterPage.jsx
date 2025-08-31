@@ -1,7 +1,7 @@
-import Navbar from "../component/Navbar";
-import image from '../assets/hero.jpg'
+import Navbar from "../../component/Navbar";
+import image from '../../assets/hero.jpg'
 import { useState } from "react";
-import Footer from "../component/Footer";
+import Footer from "../../component/Footer";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';

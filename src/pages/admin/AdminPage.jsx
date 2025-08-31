@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Aside from "../../component/Aside"
+import Aside from "./Aside"
 import Dashboard from "./Dashboard"
 import Users from "./Users"
 import Promos from "./Promos"

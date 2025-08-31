@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
-import Navbar from "../component/Navbar"
+import Navbar from "../../component/Navbar"
 import { Trash2 } from "lucide-react"
 import { toast } from "sonner"
 

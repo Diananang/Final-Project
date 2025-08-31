@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
-import CartPage from "../pages/CartPage";
 import { ShoppingCart } from "lucide-react";
 
 export default function Navbar ({authOnly = false}) {

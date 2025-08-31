@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import axios from 'axios'
-import DestinationCard from "../component/DestinationsCard";
-import Navbar from "../component/Navbar";
+import DestinationCard from "../../component/DestinationsCard";
+import Navbar from "../../component/Navbar";
 import { Building2, DollarSign, MapPin, Wrench } from "lucide-react";
 import { toast } from "sonner";
 
