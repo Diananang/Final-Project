@@ -7,7 +7,7 @@ import DestinationCard from "../component/DestinationsCard";
 import PromoSection from "./promos/PromoSection";
 import PopularSection from "./homeSections/PopularSection";
 import FeaturedSection from "./destinations/FeaturedDestinationsSection";
-import TestimonialSection from "./homesections/TestimonialSection";
+import TestimonialSection from "./homeSections/TestimonialSection";
 import Footer from "../component/Footer";
 
 export default function HomePage(){
