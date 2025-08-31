@@ -26,6 +26,7 @@ function App() {
           <Route path="/all-destinations" element={<AllDestinationsPage />}></Route>
           <Route path="/detail-promo/:id" element={<DetailPromoPage />}></Route>
           <Route path="/all-promos" element={<AllPromosPage />}></Route>
+          
           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}></Route>
           <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>}></Route>
           <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}></Route>
