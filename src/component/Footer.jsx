@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer(){
     return (
         <footer className="p-6 md:px-12 lg:px-24 space-y-20 mt-8 bg-gray-900 text-white">
@@ -8,21 +10,20 @@ export default function Footer(){
                 </div>
                 <div>
                     <h3 className="font-bold text-lg mb-2">Discover</h3>
-                    <ul>
-                        <li>Home</li>
-                        <li>About</li>
-                        <li>Popular Destinations</li>
-                    </ul>
+                    <div className="flex flex-col gap-2">
+                        <Link to="/">Home</Link>
+                        <Link to='/about'>About</Link>
+                        <Link to="/all-destination">All Destinations</Link>
+                    </div>
                 </div>
                 <div>
                     <h3 className="font-bold text-lg mb-2">Quick Links</h3>
-                    <ul>
-                        <li>Gallery</li>
-                        <li>Sign in</li>
-                        <li>Sign up</li>
-                    </ul>
+                    <div className="flex flex-col gap-2">
+                        <Link to="/signin">Sign in</Link>
+                        <Link to="/signup">Sign up</Link>
+                    </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-2">
                     <h3 className="font-bold text-lg mb-2">Contact</h3>
                     <p>Email: support@roamly.com</p>
                     <p>Phone: +62 812-3456-7890</p>

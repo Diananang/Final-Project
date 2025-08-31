@@ -55,40 +55,48 @@ export default function PopularSection(){
     }
 
     return (
-        <section className="flex flex-col gap-6">
-            <div className="flex flex-col gap-4">
-                <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Explore Popular Cities</h2>
-                <p className="text-base font-semibold text-[#778088]">From vibrant streets to hidden gems—start your journey here.</p>
+        <section className="flex flex-col gap-6 px-4 sm:px-0">
+            <div className="flex flex-col gap-2 text-center sm:text-left">
+                <h2 className="text-2xl sm:text-4xl font-bold font-volkhov text-blueBlack">
+                Explore Popular Cities
+                </h2>
+                <p className="text-sm sm:text-base font-semibold text-[#778088]">
+                From vibrant streets to hidden gems—start your journey here.
+                </p>
             </div>
-            <div className="flex flex-col sm:flex-row justify-between gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar">
+
+            <div className="flex flex-row gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 no-scrollbar">
                 {popular.map((pop) => (
-                    <div 
-                        key={pop?.id} 
-                        onClick={() => getDestinationsByCategory(pop.id)}
-                        className={`flex-shrink-0 snap-start border border-teal rounded-[30px] py-3 px-8 min-w-[150px] text-[#495560] text-center text-sm font-bold cursor-pointer hover:bg-teal hover:text-white transition
-                            ${isActive == pop.id ? "bg-teal text-white" : "text-[#495560] hover:bg-teal hover:text-white"}`}
-                    >
-                        <p>{pop.name}</p>
-                    </div>
+                <div
+                    key={pop?.id}
+                    onClick={() => getDestinationsByCategory(pop.id)}
+                    className={`flex-shrink-0 snap-start border border-teal rounded-[30px] py-2 px-6 min-w-[120px] sm:min-w-[150px] text-[#495560] text-center text-xs sm:text-sm font-bold cursor-pointer hover:bg-teal hover:text-white transition
+                    ${isActive == pop.id ? "bg-teal text-white" : "text-[#495560] hover:bg-teal hover:text-white"}`}
+                >
+                    <p>{pop.name}</p>
+                </div>
                 ))}
             </div>
-            
-            {isLoading && <p className="text-[#495560] text-sm text-center">Loading...</p>}
+
+            {isLoading && (
+                <p className="text-[#495560] text-sm text-center">Loading...</p>
+            )}
+
             {!isLoading && destinations.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {destinations.map((dest) => (
-                        <DestinationCard 
-                            key={dest.id}
-                            destination={dest}
-                            onImageError={handleImageError}
-                        />
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {destinations.map((dest) => (
+                    <DestinationCard
+                    key={dest.id}
+                    destination={dest}
+                    onImageError={handleImageError}
+                    />
+                ))}
                 </div>
             )}
 
             {destinations.length === 0 && !isLoading && (
                 <p className="text-[#495560] text-sm text-center">No results...</p>
             )}
-        </section>
+            </section>
     )
 }

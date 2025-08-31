@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
+import { toast } from "sonner"
 
 export default function Users () {
     const [allUsers, setAllUsers] = useState([])
@@ -72,84 +73,92 @@ export default function Users () {
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-12">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">All Users</h1>
+            <h1 className="text-xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
+                All Users
+            </h1>
 
+            {/* Search */}
             <div className="mb-4">
                 <input
-                type="text"
-                placeholder="Search by name, email, or role"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="w-full max-w-md p-2 border border-gray-400 rounded shadow-sm"
+                    type="text"
+                    placeholder="Search by name, email, or role"
+                    value={search}
+                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                    className="w-full max-w-md p-2 border border-gray-400 rounded shadow-sm text-sm sm:text-base"
                 />
             </div>
 
+            {/* Table */}
             <div className="overflow-x-auto">
-                <table className="min-w-[700px] sm:min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <table className="min-w-[600px] sm:min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead className="bg-gray-100">
                     <tr>
-                    <th className="text-left p-2 sm:p-3">Photo</th>
-                    <th className="text-left p-2 sm:p-3">Name</th>
-                    <th className="text-left p-2 sm:p-3">Email</th>
-                    <th className="text-left p-2 sm:p-3">Phone</th>
-                    <th className="text-left p-2 sm:p-3">Role</th>
-                    <th className="text-left p-2 sm:p-3">Actions</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Photo</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Name</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Email</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Phone</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Role</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {currentUsers.map(user => (
-                    <tr key={user.id} className="border-b hover:bg-gray-50 transition-colors">
-                        <td className="p-2 sm:p-3">
-                        <img 
-                            src={user.profilePictureUrl || "/placeholder.jpg"} 
-                            alt={user.name} 
-                            className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-full"
-                            onError={(e) => e.target.src = "/placeholder.jpg"}
-                        />
-                        </td>
-                        <td className="p-2 sm:p-3">{user.name}</td>
-                        <td className="p-2 sm:p-3">{user.email}</td>
-                        <td className="p-2 sm:p-3">{user.phoneNumber}</td>
-                        <td className="p-2 sm:p-3">{user.role}</td>
-                        <td className="p-2 sm:p-3 flex gap-2 items-center flex-wrap">
-                        <select
-                            value={editingRole[user.id] || user.role}
-                            onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                            className="border border-gray-400 rounded p-1 text-sm sm:text-base"
-                        >
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <button
-                            onClick={() => handleUpdateRole(user.id)}
-                            className="px-2 py-1 bg-teal text-white rounded text-sm sm:text-base"
-                        >
-                            Save
-                        </button>
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
+                    <tbody>
+                        {currentUsers.map(user => (
+                        <tr key={user.id} className="border-b hover:bg-gray-50 transition-colors">
+                            <td className="p-2 sm:p-3">
+                            <img
+                                src={user.profilePictureUrl || "/placeholder.jpg"}
+                                alt={user.name}
+                                className="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-full"
+                                onError={(e) => e.target.src = "/placeholder.jpg"}
+                            />
+                            </td>
+                            <td className="p-2 sm:p-3 text-xs sm:text-sm">{user.name}</td>
+                            <td className="p-2 sm:p-3 text-xs sm:text-sm break-words">{user.email}</td>
+                            <td className="p-2 sm:p-3 text-xs sm:text-sm">{user.phoneNumber}</td>
+                            <td className="p-2 sm:p-3 text-xs sm:text-sm">{user.role}</td>
+                            <td className="p-2 sm:p-3 flex gap-2 items-center flex-wrap">
+                            <select
+                                value={editingRole[user.id] || user.role}
+                                onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                className="border border-gray-400 rounded p-1 text-xs sm:text-sm"
+                            >
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <button
+                                onClick={() => handleUpdateRole(user.id)}
+                                className="px-2 py-1 bg-teal text-white rounded text-xs sm:text-sm"
+                            >
+                                Save
+                            </button>
+                            </td>
+                        </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
 
+            {/* Pagination */}
             <div className="flex flex-wrap justify-center mt-4 sm:mt-6 gap-2">
                 <button
-                disabled={page === 1}
-                onClick={() => setPage(prev => prev - 1)}
-                className="px-3 py-2 sm:px-4 sm:py-2 bg-teal text-white rounded disabled:opacity-50"
+                    disabled={page === 1}
+                    onClick={() => setPage(prev => prev - 1)}
+                    className="px-3 py-1 sm:px-4 sm:py-2 bg-teal text-white rounded text-sm sm:text-base disabled:opacity-50"
                 >
-                Prev
+                    Prev
                 </button>
-                <span className="px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 rounded">{page} / {totalPages}</span>
+                <span className="px-3 py-1 sm:px-4 sm:py-2 bg-gray-200 rounded text-sm sm:text-base">
+                    {page} / {totalPages}
+                </span>
                 <button
-                disabled={page === totalPages}
-                onClick={() => setPage(prev => prev + 1)}
-                className="px-3 py-2 sm:px-4 sm:py-2 bg-teal text-white rounded disabled:opacity-50"
+                    disabled={page === totalPages}
+                    onClick={() => setPage(prev => prev + 1)}
+                    className="px-3 py-1 sm:px-4 sm:py-2 bg-teal text-white rounded text-sm sm:text-base disabled:opacity-50"
                 >
-                Next
+                    Next
                 </button>
             </div>
         </div>
+
     )
 }

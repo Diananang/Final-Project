@@ -42,25 +42,30 @@ export default function FeaturedSection(){
 
     return (
         <section className="flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-4">
-                    <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Featured Destinations</h2>
-                    <p className="text-base font-semibold text-[#778088]">Where will your next adventure take you?</p>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div className="flex flex-col gap-2">
+                    <h2 className="text-2xl sm:text-4xl font-bold font-volkhov text-blueBlack">
+                        Featured Destinations
+                    </h2>
+                    <p className="text-sm sm:text-base font-semibold text-[#778088]">
+                        Where will your next adventure take you?
+                    </p>
                 </div>
-                <Link 
-                        to="/all-destinations"
-                        className="w-fit bg-[#495560] py-4 px-10 text-sm font-bold text-white self-end rounded-sm"
-                        >
-                            View All Destinations
+                <Link
+                    to="/all-destinations"
+                    className="w-fit bg-[#495560] py-3 px-6 sm:py-4 sm:px-10 text-sm font-bold text-white rounded-sm self-start sm:self-end"
+                >
+                    View All Destinations
                 </Link>
             </div>
-            <div className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-2">
+
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 no-scrollbar">
                 {destinations.map((dest) => (
-                    <DestinationCard 
-                        key={dest.id}
-                        destination={dest}
-                        onImageError={handleImageError}
-                    />
+                <DestinationCard
+                    key={dest.id}
+                    destination={dest}
+                    onImageError={handleImageError}
+                />
                 ))}
             </div>
         </section>

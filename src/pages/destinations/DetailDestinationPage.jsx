@@ -14,8 +14,6 @@ export default function DetailDestinationPage(){
     const navigate = useNavigate()
 
     const [date, setDate] = useState("")
-    const [guest, setGuest] = useState(1)
-    const [subTotal, setSubTotal] = useState(0)
 
     const getDetailDest = async () => {
         try {
@@ -27,11 +25,11 @@ export default function DetailDestinationPage(){
                     }
                 }
             )
-            console.log(res);
-            setDetailDest(res.data.data)
-            if (res.data.data.imageUrls && res.data.data.imageUrls.length > 0) {
-                setSelectedImage(res.data.data.imageUrls[0])
-            }
+                console.log(res);
+                setDetailDest(res.data.data)
+                if (res.data.data.imageUrls && res.data.data.imageUrls.length > 0) {
+                    setSelectedImage(res.data.data.imageUrls[0])
+                }
         } catch (error) {
             console.log(error);
         }
@@ -45,7 +43,6 @@ export default function DetailDestinationPage(){
         const token = localStorage.getItem('token')
         const payload = {
             activityId,
-            quantity: guest,
         }
 
         if (!token) {
@@ -88,8 +85,8 @@ export default function DetailDestinationPage(){
             },
             }
         );
-        const filtered = res.data.data.filter((act) => act.id !== id).slice(0, 4);
-        setRecommended(filtered);
+            const filtered = res.data.data.filter((act) => act.id !== id).slice(0, 4);
+            setRecommended(filtered);
         } catch (error) {
         console.log(error);
         }
@@ -99,12 +96,6 @@ export default function DetailDestinationPage(){
         getDetailDest();
         getRecommended();
     },[id])
-
-    useEffect(() => {
-        if(detailDest.price) {
-            setSubTotal(detailDest.price * guest)
-        }
-    }, [detailDest.price, guest])
 
     return (
         <div className="relative w-full min-h-screen bg-white">
@@ -197,18 +188,8 @@ export default function DetailDestinationPage(){
                             />
                         </div>
                         <div>
-                            <label className="block text-[15px] font-bold mb-1">Guests</label>
-                            <input 
-                                type="number"
-                                min="1"
-                                value={guest}
-                                onChange={(e) => setGuest(Number(e.target.value))} 
-                                className="w-full bg-[#F4F4F5] rounded px-2 py-1 text-sm"
-                            />
-                        </div>
-                        <div>
-                            <p className="text-[#778088] text-sm font-semibold">Subtotal</p>
-                            <p className="text-teal font-black text-4xl">Rp {subTotal?.toLocaleString()}</p>
+                            <p className="text-[#778088] text-sm font-semibold">Price</p>
+                            <p className="text-teal font-black text-4xl">Rp {detailDest.price?.toLocaleString()}</p>
                         </div>
                         <button
                             onClick={() => handleAddToCart(detailDest.id)}

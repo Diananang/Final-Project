@@ -39,54 +39,62 @@ export default function PromoSection(){
 
     return (
         <section className="flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-4">
-                    <h2 className="text-4xl font-bold font-volkhov text-blueBlack">Promo Highlights</h2>
-                    <p className="text-base font-semibold text-[#778088]">Travel more, spend less - book your getaway today.</p>
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div className="flex flex-col gap-2">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-volkhov text-blueBlack">
+                        Promo Highlights
+                    </h2>
+                    <p className="text-sm sm:text-base font-semibold text-[#778088]">
+                        Travel more, spend less - book your getaway today.
+                    </p>
                 </div>
                 <Link 
                     to="/all-promos"
-                    className="w-fit bg-[#495560] py-4 px-10 text-sm font-bold text-white self-end rounded-sm"
-                    >
-                        View All Promos
+                    className="w-fit bg-[#495560] py-2 sm:py-3 px-6 sm:px-10 text-xs sm:text-sm font-bold text-white rounded-sm self-start sm:self-end"
+                >
+                    View All Promos
                 </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {promos.map((promo) => (
-                    <div 
-                        key={promo?.id} 
-                        className="relative h-40 bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
-                        <img 
-                            src={promo.imageUrl} 
-                            alt={promo.title} 
-                            className="w-full h-full object-cover"
-                            onError={handleImageError}
-                        />
-                        <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-4 text-white">
-                            <Link 
-                                to={`/detail-promo/${promo.id}`}
-                                className="absolute top-3 right-3 flex items-center gap-1 self-end text-sm text-gray-100 hover:text-gray-200 "
-                                >
-                                View Promo
-                                <svg
+                <div 
+                    key={promo?.id} 
+                    className="relative h-48 sm:h-56 lg:h-60 bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden"
+                >
+                    <img 
+                        src={promo.imageUrl} 
+                        alt={promo.title} 
+                        className="w-full h-full object-cover"
+                        onError={handleImageError}
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-4 text-white">
+                        <Link 
+                            to={`/detail-promo/${promo.id}`}
+                            className="absolute top-3 right-3 flex items-center gap-1 text-xs sm:text-sm text-gray-100 hover:text-gray-200"
+                        >
+                            View Promo
+                            <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={2}
                                 stroke="currentColor"
                                 className="w-4 h-4"
-                                >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M17.25 6.75L6.75 17.25M17.25 6.75H7.5m9.75 0V16.5"
-                                    />
-                                </svg>
-                            </Link>
-                            <h3 className="font-bold text-lg mb-1">{promo.title}</h3>
-                            <p className="text-sm text-gray-200 mb-3">{promo.description.slice(0,80)}...</p>
-                        </div>
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.25 6.75L6.75 17.25M17.25 6.75H7.5m9.75 0V16.5"
+                            />
+                            </svg>
+                        </Link>
+                        <h3 className="font-bold text-base sm:text-lg mb-1">{promo.title}</h3>
+                        <p className="text-xs sm:text-sm text-gray-200 mb-3">
+                            {promo.description.slice(0, 80)}...
+                        </p>
                     </div>
+                </div>
                 ))}
             </div>
         </section>

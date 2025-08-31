@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from 'axios'
 import {toast} from 'sonner'
-import { PenBox, Trash2 } from 'lucide-react';
+import { PenBox, PlusCircle, Trash2 } from 'lucide-react';
 
 export default function Promos () {
     const [promos, setPromos] = useState([])
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [editingPromo, setEditingPromo] = useState(null);
+    const [page, setPage] = useState(1);
+    const limit = 2;
 
     const [form, setForm] = useState({
         title: "",
@@ -17,8 +19,17 @@ export default function Promos () {
         minimum_claim_price: "",
         promo_discount_price: "",
         image: null,
-        preview: "",
+        preview: ""
     });
+
+    const handleInputChange = (e) => {
+        const {name, value, files} = e.target;
+        if(files){
+            setForm(prev => ({...prev, image: files[0], preview: URL.createObjectURL(files[0])}))
+        } else {
+            setForm(prev => ({...prev, [name] : value}))
+        }
+    }
     
     const getPromos = async () => {
         try {
@@ -34,132 +45,85 @@ export default function Promos () {
             setPromos(res.data.data)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to fetch promos");
         }
     }
-    const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
-        if (files) {
-            setForm((prev) => ({
-            ...prev,
-            image: files[0],
-            preview: URL.createObjectURL(files[0]),
-            }));
-        } else {
-            setForm((prev) => ({ ...prev, [name]: value }));
-        }
-    };
 
-    const openEditModal = (promo) => {
-        setEditingPromo(promo);
-        setForm({
-            title: promo.title,
-            description: promo.description,
-            promo_code: promo.promo_code,
-            term_condition: promo.term_condition,
-            minimum_claim_price: promo.minimum_claim_price,
-            promo_discount_price: promo.promo_discount_price,
-            image: null,
-            preview: promo.imageUrl,
-        });
-        setModalOpen(true);
-    };
-
-    const handleImageError = (e) => {
-        e.target.src = "/fallback.jpg";
-    };
-
-    const handleSubmit = async () => {
-        // if (!form.title || !form.description || !form.promo_code || !form.terms_condition) {
-        //     toast.error("Please fill all required fields");
-        //     return;
-        // }
+    const uploadImage = async (file) => {
+        if (!file) return null;
+        const formData = new FormData()
+        formData.append("image", file)
 
         try {
-            setLoading(true);
-            let imageUrl = form.preview;
-
-            // jika ada data baru
-            if (form.image) {
-                const imgForm = new FormData();
-                imgForm.append("image", form.image);
-
-                const uploadRes = await axios.post(
-                    `${import.meta.env.VITE_BASE_URL}/api/v1/upload-image`,
-                    imgForm,
-                    {
-                        headers: {
-                            apikey: import.meta.env.VITE_API_KEY,
-                            "Content-Type": "multipart/form-data",
-                        },
+            const res = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/api/v1/upload-image`,
+                formData,
+                {
+                    headers: {
+                        apikey: import.meta.env.VITE_API_KEY,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "multipart/form-data",
                     }
-                );
-                imageUrl = uploadRes.data.url;
-            }
-            
-            const payload = {
-                title: form.title,
-                description: form.description,
-                promo_code: form.promo_code,
-                terms_condition: form.terms_condition,
-                minimum_claim_price: Number(form.minimum_claim_price),
-                promo_discount_price: Number(form.promo_discount_price),
-                imageUrl, 
-            };
+                }
+            )
+            console.log(res);
+            return res.data.url
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to upload image")
+            return null;
+        }
+    }
 
-            if (editingPromo) {
-                await axios.put(
-                    `${import.meta.env.VITE_BASE_URL}/api/v1/update-promo/${editingPromo.id}`,
-                    payload,
-                    {
-                        headers: {
-                            apikey: import.meta.env.VITE_API_KEY,
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                );
-                toast.success("Promo updated successfully");
-            } else {
-                await axios.post(
+    const createPromo = async (payload) => {
+        try {
+            const res = await axios.post(
                 `${import.meta.env.VITE_BASE_URL}/api/v1/create-promo`,
                 payload,
                 {
                     headers: {
                         apikey: import.meta.env.VITE_API_KEY,
-                    },
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }
-                );
-                toast.success("Promo created successfully");
-            }
-            setModalOpen(false);
-            setEditingPromo(null);
-            setForm({ 
-                title: "", 
-                description: "", 
-                promo_code: "", 
-                term_condition: "", 
-                minimum_claim_price: "", 
-                promo_discount_price: "", 
-                image: null, 
-                preview: "" ,
-            })
-            getPromos();
+            )
+            console.log(res);
+            toast.success("Promo created successfully");
         } catch (error) {
             console.log(error);
-            toast.error("Operation failed");
-        } finally {
-            setLoading(false);
+            toast.error("Failed to create promo");
         }
-    };
+    }
 
-    const handleDelete = async (id) => {
+    const updatePromo = async (promoId, payload) => {
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/api/v1/update-promo/${promoId}`,
+                payload,
+                {
+                    headers: {
+                        apikey: import.meta.env.VITE_API_KEY,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            )
+            console.log(res);
+            toast.success("Promo updated successfully");
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update promo");
+        }
+    }
+
+    const handleDelete = async (promoId) => {
         if (!confirm("Are you sure want to delete this promo?")) return;
         try {
-            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/delete-promo/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/delete-promo/${promoId}`, {
                 headers: { 
-                    apikey: import.meta.env.VITE_API_KEY 
+                    apikey: import.meta.env.VITE_API_KEY,
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
-            }
-        );
+            });
             toast.success("Promo deleted");
             getPromos();
         } catch (error) {
@@ -168,71 +132,160 @@ export default function Promos () {
         }
     };
 
+
+    const handleSubmit = async () => {
+        setLoading(true)
+
+        try {
+            let imageUrl = form.preview;
+            if (form.image) {
+                const uploadedUrl = await uploadImage(form.image);
+                if (uploadedUrl) imageUrl = uploadedUrl;
+            }
+
+            const payload = {
+                title: form.title,
+                description: form.description,
+                imageUrl,
+                terms_condition: form.terms_condition,
+                promo_code: form.promo_code,
+                promo_discount_price: Number(form.promo_discount_price),
+                minimum_claim_price: Number(form.minimum_claim_price),
+            }
+            if (editingPromo) {
+                await updatePromo(editingPromo.id, payload)
+            }else{
+                await createPromo(payload)
+            }
+            setModalOpen(false);
+            setEditingPromo(null);
+            setForm({
+                title: "",
+                description: "",
+                promo_code: "",
+                terms_condition: "",
+                minimum_claim_price: "",
+                promo_discount_price: "",
+                image: null,
+                preview: ""
+            });
+            getPromos();
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to save promo");
+        } finally {
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
-        getPromos();
-    },[])
+        getPromos(page);
+    },[page])
+
+    const totalPages = Math.ceil(promos.length / limit);
+    const currentData = promos.slice((page - 1) * limit, page * limit);
+
+    const handleImageError = (e) => {
+        e.target.src = "/fallback.jpg";
+    };
+
+    const openEditModal = (promo) => {
+        setEditingPromo(promo);
+        setForm({
+            title: promo.title,
+            description: promo.description,
+            promo_code: promo.promo_code,
+            terms_condition: promo.terms_condition,
+            minimum_claim_price: promo.minimum_claim_price,
+            promo_discount_price: promo.promo_discount_price,
+            image: null,
+            preview: promo.imageUrl,
+        });
+        setModalOpen(true);
+    };
+
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <h1 className="text-2xl sm:text-3xl font-bold">All Promos</h1>
                 <button 
-                    onClick={() => setModalOpen(true)} 
-                    className="px-4 py-2 bg-teal text-white rounded">
-                Add Promo
+                    onClick={() => setModalOpen(true)} >
+                        <PlusCircle size={24} className="text-teal"/>
                 </button>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-                <thead className="bg-gray-100">
-                    <tr>
-                    <th className="p-3 text-left">Image</th>
-                    <th className="p-3 text-left">Title</th>
-                    <th className="p-3 text-left">Description</th>
-                    <th className="p-3 text-left">Promo Code</th>
-                    <th className="p-3 text-left">Term</th>
-                    <th className="p-3 text-left">Min Claim</th>
-                    <th className="p-3 text-left">Discount</th>
-                    <th className="p-3 text-left">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {promos.map((promo) => (
-                    <tr key={promo.id} className="border-b hover:bg-gray-50 transition-colors">
-                        <td className="p-3">
-                        <img
-                            src={promo.imageUrl || "/placeholder.jpg"}
-                            alt={promo.title}
-                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded"
-                            onError={handleImageError}
-                        />
-                        </td>
-                        <td className="p-3">{promo.title}</td>
-                        <td className="p-3 max-w-xs sm:max-w-md line-clamp-3 text-sm">{promo.description}</td>
-                        <td className="p-3">{promo.promo_code}</td>
-                        <td className="p-3 max-w-xs sm:max-w-md line-clamp-3">{promo.terms_condition}</td>
-                        <td className="p-3">Rp {promo.minimum_claim_price?.toLocaleString()}</td>
-                        <td className="p-3">Rp {promo.promo_discount_price?.toLocaleString()}</td>
-                        <td className="p-3 flex gap-2 flex-wrap">
-                        <button 
-                            onClick={() => openEditModal(promo)} 
-                            className="px-2 py-1 text-blue-500 rounded"
-                        >
-                            <PenBox />
-                        </button>
-                        <button 
-                            onClick={() => handleDelete(promo.id)} 
-                            className="px-2 py-1 text-red-500  rounded"
-                        >
-                            <Trash2 />
-                        </button>
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
-                </table>
+            <div className="flex flex-col gap-4">
+                {currentData.map((promo) => (
+                <div 
+                    key={promo.id} 
+                    className="flex flex-col bg-white shadow-md rounded-lg overflow-hidden"
+                >
+                    <img
+                        src={promo.imageUrl}
+                        alt={promo.title}
+                        className="w-full h-48 object-cover"
+                        onError={handleImageError}
+                    />
+
+                    <div className="p-4 flex flex-col gap-2 flex-1 text-blueBlack">
+                        <h3 className="text-lg font-bold">{promo.title}</h3>
+                        <p className="text-sm font-semibold text-teal">{promo.promo_code}</p>
+                        <div className="flex flex-col">
+                            <span className="text-[15px] font-bold">Description</span>
+                            <p className="text-sm text-[#495560]">{promo.description}</p>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[15px] font-bold">Terms & Condition</span>
+                            <p className="text-sm text-[#495560]" dangerouslySetInnerHTML={{ __html: promo.terms_condition }}></p>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[15px] font-bold">Minimum Price</span>
+                            <p className="text-sm text-[#495560]">Rp {promo.minimum_claim_price?.toLocaleString()}</p>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[15px] font-bold">Minimum Price</span>
+                            <p className="text-sm text-[#495560]">Rp {promo.promo_discount_price?.toLocaleString()}</p>
+                        </div>
+                        <div>
+                            <button 
+                                onClick={() => openEditModal(promo)} 
+                                className="px-2 py-1 text-teal rounded"
+                            >
+                                <PenBox />
+                            </button>
+                            <button 
+                                onClick={() => handleDelete(promo.id)} 
+                                className="px-2 py-1 text-red-500  rounded"
+                            >
+                                <Trash2 />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                ))}
+                
+                <div className="flex justify-center mt-8 gap-2">
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage(prev => prev - 1)}
+                        className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
+                    >
+                        Prev
+                    </button>
+                    <span className="px-4 py-2 bg-gray-200 rounded">
+                        {page} / {totalPages}
+                    </span>
+                    <button
+                        disabled={page === totalPages}
+                        onClick={() => setPage(prev => prev + 1)}
+                        className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
+
 
             {modalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4 z-50">
@@ -263,9 +316,9 @@ export default function Promos () {
                         className="border p-2 rounded w-full" 
                     />
                     <textarea 
-                        name="term_condition" 
-                        placeholder="Term Condition" 
-                        value={form.term_condition} 
+                        name="terms_condition" 
+                        placeholder="Terms & Condition" 
+                        value={form.terms_condition} 
                         onChange={handleInputChange} 
                         className="border p-2 rounded w-full" 
                     />
@@ -303,31 +356,33 @@ export default function Promos () {
                     </div>
 
                     <div className="flex justify-end gap-2 mt-4">
-                    <button 
-                        onClick={() => { 
-                            setModalOpen(false); 
-                            setEditingPromo(null); 
-                            setForm({ 
-                                title: "", 
-                                description: "", 
-                                promo_code: "", 
-                                term_condition: "", 
-                                minimum_claim_price: "", 
-                                promo_discount_price: "", 
-                                image: null, preview: "" 
-                                }); 
-                                }} 
-                        className="px-4 py-2 bg-gray-300 rounded"
+                        <button 
+                            onClick={() => { 
+                                setModalOpen(false); 
+                                setEditingPromo(null); 
+                                setForm({ 
+                                    title: "", 
+                                    description: "", 
+                                    promo_code: "", 
+                                    terms_condition: "", 
+                                    minimum_claim_price: "", 
+                                    promo_discount_price: "", 
+                                    image: null, 
+                                    preview: "" 
+                                    }); 
+                                }
+                            } 
+                            className="px-4 py-2 bg-gray-300 rounded"
+                            >
+                                Cancel
+                        </button>
+                        <button 
+                            onClick={handleSubmit} 
+                            disabled={loading} 
+                            className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
                         >
-                            Cancel
-                    </button>
-                    <button 
-                        onClick={handleSubmit} 
-                        disabled={loading} 
-                        className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
-                    >
-                        {loading ? "Saving..." : "Save"}
-                    </button>
+                            {loading ? "Saving..." : "Save"}
+                        </button>
                     </div>
                 </div>
                 </div>

@@ -1,24 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { toast} from 'sonner';
 import DestinationCard from "../../component/DestinationsCard";
 import Navbar from "../../component/Navbar";
 
 export default function AllDestinationsPage() {
     const [allDest, setAllDest] = useState([])
-    const navigate = useNavigate()
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    const limit = 10;
+    const limit = 6;
 
-    const getAllDestinations = async (pageNumber = 1) => {
+    const getAllDestinations = async () => {
         try {
             setLoading(true);
             const res = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/activities?page=${pageNumber}&limit=${limit}`,
+                `${import.meta.env.VITE_BASE_URL}/api/v1/activities`,
                 {
                     headers: {
                         apikey: import.meta.env.VITE_API_KEY
@@ -27,7 +24,6 @@ export default function AllDestinationsPage() {
             )
             console.log(res);
             setAllDest(res.data.data)
-            setTotalPages(res.data.data.length < limit ? pageNumber : pageNumber + 1)
         } catch (error) {
             console.log(error);
             toast.error("Failed to fetch destinations");
@@ -44,6 +40,9 @@ export default function AllDestinationsPage() {
         getAllDestinations(page);
     },[page])
 
+    const totalPages = Math.ceil(allDest.length / limit);
+    const currentData = allDest.slice((page - 1) * limit, page * limit);
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar />
@@ -56,7 +55,7 @@ export default function AllDestinationsPage() {
                 ) : (
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {allDest.map(dest => (
+                    {currentData.map(dest => (
                         <DestinationCard
                         key={dest.id}
                         destination={dest}
@@ -67,23 +66,23 @@ export default function AllDestinationsPage() {
                     </div>
 
                     <div className="flex justify-center mt-8 gap-2">
-                    <button
-                        disabled={page === 1}
-                        onClick={() => setPage(prev => prev - 1)}
-                        className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
-                    >
-                        Prev
-                    </button>
-                    <span className="px-4 py-2 bg-gray-200 rounded">
-                        {page} / {totalPages}
-                    </span>
-                    <button
-                        disabled={page === totalPages}
-                        onClick={() => setPage(prev => prev + 1)}
-                        className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
+                        <button
+                            disabled={page === 1}
+                            onClick={() => setPage(prev => prev - 1)}
+                            className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
+                        >
+                            Prev
+                        </button>
+                        <span className="px-4 py-2 bg-gray-200 rounded">
+                            {page} / {totalPages}
+                        </span>
+                        <button
+                            disabled={page === totalPages}
+                            onClick={() => setPage(prev => prev + 1)}
+                            className="px-4 py-2 bg-teal text-white rounded disabled:opacity-50"
+                        >
+                            Next
+                        </button>
                     </div>
                 </>
                 )}

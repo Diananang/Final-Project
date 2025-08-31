@@ -12,6 +12,8 @@ import CartPage from "./pages/transactions/CartPage"
 import Checkout from "./pages/transactions/CheckoutPage"
 import UploadPaymentProof from "./pages/transactions/PaymentProof"
 import ProtectedRoute from "./component/ProtectToken"
+import MyTransactions from "./pages/transactions/MyTransactions"
+import AdminRoute from "./component/AdminRoute"
 
 function App() {
 
@@ -27,10 +29,11 @@ function App() {
           <Route path="/detail-promo/:id" element={<DetailPromoPage />}></Route>
           <Route path="/all-promos" element={<AllPromosPage />}></Route>
           
-          <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>}></Route>
+          <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>}></Route>
           
           <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>}></Route>
           <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}></Route>
+          <Route path="/my-transactions" element={<ProtectedRoute><MyTransactions /></ProtectedRoute>}></Route>
           <Route path="/upload-payment-proof" element={<ProtectedRoute><UploadPaymentProof /></ProtectedRoute>}></Route>
         </Routes>
       </BrowserRouter>

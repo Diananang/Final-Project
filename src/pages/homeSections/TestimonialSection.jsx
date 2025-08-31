@@ -43,41 +43,45 @@ export default function TestimonialSection(){
 
     return (
         <section className="flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-4">
-                    <h2 className="text-4xl font-bold font-volkhov text-blueBlack">What Our Customers Say</h2>
-                    <p className="text-base font-semibold text-[#778088]">Hear what travelers are saying about their journeys with us.</p>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div className="flex flex-col gap-2">
+                <h2 className="text-2xl sm:text-4xl font-bold font-volkhov text-blueBlack">
+                    What Our Customers Say
+                </h2>
+                <p className="text-sm sm:text-base font-semibold text-[#778088]">
+                    Hear what travelers are saying about their journeys with us.
+                </p>
                 </div>
 
-                <div className="flex gap-4 w-fit h-fit text-blueBlack">
-                    <button
-                        onClick={() => scroll('left')}
-                        className="bg-white border border-yellow rounded-full p-2 hover:bg-yellow shadow-lg shadow-yellow/50"
-                    >
-                        <ChevronLeft />
-                    </button>
-                    <button
-                        onClick={() => scroll('right')}
-                        className="bg-white border border-yellow rounded-full p-2 hover:bg-yellow shadow-lg shadow-yellow/50"
-                    >
-                        <ChevronRight />
-                    </button>
+                <div className="flex gap-3 text-blueBlack">
+                <button
+                    onClick={() => scroll("left")}
+                    className="bg-white border border-yellow rounded-full p-2 hover:bg-yellow shadow-lg shadow-yellow/50"
+                >
+                    <ChevronLeft />
+                </button>
+                <button
+                    onClick={() => scroll("right")}
+                    className="bg-white border border-yellow rounded-full p-2 hover:bg-yellow shadow-lg shadow-yellow/50"
+                >
+                    <ChevronRight />
+                </button>
                 </div>
             </div>
 
-            <div 
+            <div
                 ref={scrollRef}
-                className="flex flex-col sm:flex-row gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-4"
+                className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-4sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-x-visible"
+            >
+                {testimonials.map((t) => (
+                <div
+                    key={t.id}
+                    className=" bg-white p-6 rounded-lg shadow min-w-[280px] sm:min-w-0 flex-shrink-0 "
                 >
-                    {testimonials.map((t) => (
-                        <div
-                            key={t.id} 
-                            className="bg-white p-6 rounded-lg shadow min-w-[300px] max-w-[300px] flex-shrink-0">
-                            <p className="italic">{t.message}</p>
-                            <p className="mt-2 font-bold">{t.name}</p>
-                        </div>
-
-                    ))}
+                    <p className="italic">{t.message}</p>
+                    <p className="mt-2 font-bold">{t.name}</p>
+                </div>
+                ))}
             </div>
         </section>
     )

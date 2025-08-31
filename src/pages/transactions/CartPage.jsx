@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
 import Navbar from "../../component/Navbar"
-import { Trash2 } from "lucide-react"
+import { Minus, Plus, PlusCircle, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 export default function CartPage() {
   const [carts, setCarts] = useState([])
+  const [update, setUpdate] = useState([])
   const [selectedCarts, setSelectedCarts] = useState([])
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -32,6 +33,35 @@ export default function CartPage() {
     }
   }
 
+  const updateCart = async (cartId, newQuantity) => {
+    if (newQuantity < 1) return;
+
+    setLoading(true)
+    try {
+      const payload = {
+        quantity : newQuantity,
+      }
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/update-cart/${cartId}`,
+        payload,
+        {
+          headers: {
+            apikey: import.meta.env.VITE_API_KEY,
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      )
+      console.log(res);
+      await getCarts()
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to update Cart")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleDelete = async (cartId) => {
     const confirmDelete = window.confirm("Are you sure you want to remove this item?")
     if (!confirmDelete) return
@@ -52,34 +82,6 @@ export default function CartPage() {
     } catch (error) {
       console.log(error);
       toast.error("Failed to delete item")
-    }
-  }
-
-  const handleUpdateQuantity = async (cartId, newQty) => {
-    if (newQty < 1) return;
-
-    const payload = {
-      quantity: newQty,
-    }
-    
-    try {
-      setCarts(prev => prev.map(cart => cart.id === cartId ? {...cart, quantity: newQty} : cart))
-
-      await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/update-cart/${cartId}`,
-        payload,
-        {
-          headers: {
-            apikey: import.meta.env.VITE_API_KEY,
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      toast.success("Quantity updated")
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.message || "Failed to update quantity")
-      getCarts()
     }
   }
 
@@ -159,7 +161,18 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => updateCart(cart.id, cart.quantity - 1)}
+                    disabled={cart.quantity <= 1}
+                  >
+                    <Minus size={20} />
+                  </button>
                   <span className="text-sm">Guests: {cart.quantity}</span>
+                  <button
+                    onClick={() => updateCart(cart.id, cart.quantity + 1)}
+                  >
+                    <Plus size={20}/>
+                  </button>
                 </div>
 
                 <p className="font-semibold w-32 text-right">Rp {(cart.activity.price * cart.quantity)?.toLocaleString()}</p>

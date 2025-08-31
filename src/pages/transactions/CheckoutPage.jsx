@@ -14,6 +14,11 @@ export default function Checkout () {
     const [selectedPayment, setSelectedPayment] = useState("")
     const [loading, setLoading] = useState(false)
 
+    const total = carts.reduce(
+        (sum, cart) => sum + cart.activity.price * cart.quantity,
+        0
+    )
+
     const getCartDetails = async () => {
         try {
         const res = await axios.get(
@@ -25,9 +30,9 @@ export default function Checkout () {
             }
             }
         )
-        console.log(res);
-        const filteredCarts = res.data.data.filter(cart => selectedCarts.includes(cart.id))
-        setCarts(filteredCarts)
+            console.log(res);
+            const filteredCarts = res.data.data.filter(cart => selectedCarts.includes(cart.id))
+            setCarts(filteredCarts)
         } catch (error) {
         console.log(error)
         toast.error("Failed to fetch cart details")
@@ -39,64 +44,48 @@ export default function Checkout () {
         const res = await axios.get(
             `${import.meta.env.VITE_BASE_URL}/api/v1/payment-methods`,
             {
-            headers: {
-                apikey: import.meta.env.VITE_API_KEY,
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-            }
-        )
-        console.log(res);
-        setPaymentMethods(res.data.data)
+                headers: {
+                    apikey: import.meta.env.VITE_API_KEY,
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            console.log(res);
+            setPaymentMethods(res.data.data)
         } catch (error) {
             console.log(error)
             toast.error("Failed to fetch payment methods")
         }
     }
 
-    const total = carts.reduce((sum, cart) => sum + cart.activity.price * cart.quantity, 0)
-
-    const handlePayment = async () => {
+    const createTransaction = async () => {
         if (!selectedPayment) {
             toast.error("Please select a payment method")
             return
         }
 
+        setLoading(true)
         try {
-            setLoading(true)
             const payload = {
-                cartIds: selectedCarts.map(cart => cart.id),
+                cartIds: selectedCarts,
                 paymentMethodId: selectedPayment,
             }
+
             const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/create-transaction`,
-                payload,
-                {
+            `${import.meta.env.VITE_BASE_URL}/api/v1/create-transaction`,
+            payload,
+            {
                 headers: {
                     apikey: import.meta.env.VITE_API_KEY,
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
-            }
-        )
-        console.log(res);
-        const transactionId = res.data.data.transactionId;
-        if (!transactionId) {
-            toast.error("Transaction ID not found");
-            setLoading(false);
-            return;
-        }
-
-        toast.success(res.data.message || "Payment successful")
-        navigate("/upload-payment-proof", {
-            state: {
-                selectedCarts,
-                total,
-                paymentMethodId: selectedPayment,
-                transactionId  
-            }})
+            })
+            console.log(res);
+            toast.success("Transaction created")
+            navigate("/my-transactions")
         } catch (error) {
-            console.log(error)
-            toast.error(error.response?.data?.message || "Payment failed")
-        } finally{
+            console.log(error);
+            toast.error(error.response?.data?.message || "Failed to create transaction")
+        } finally {
             setLoading(false)
         }
     }
@@ -113,36 +102,50 @@ export default function Checkout () {
             <div className="px-6 sm:px-24 py-6">
                 <h1 className="text-3xl font-bold mb-6">Checkout</h1>
                 
+                {/* cart */}
                 <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Items</h2>
                 {carts.map(cart => (
                     <div key={cart.id} className="flex justify-between py-2 border-b">
                         <span>{cart.activity.title} x {cart.quantity}</span>
-                        <span>Rp {(cart.activity.price * cart.quantity).toLocaleString()}</span>
+                        <span>Rp {(cart.activity.price * cart.quantity)?.toLocaleString()}</span>
                     </div>
                 ))}
-                <div className="flex justify-between py-2 font-bold">
-                    <span>Total</span>
-                    <span>Rp {total.toLocaleString()}</span>
-                </div>
+                    <div className="flex justify-between py-2 font-bold">
+                        <span>Total</span>
+                        <span>Rp {total?.toLocaleString()}</span>
+                    </div>
                 </div>
 
+                {/* payment */}
                 <div className="mb-6">
                     <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
-                    <select
-                        value={selectedPayment}
-                        onChange={(e) => setSelectedPayment(e.target.value)}
-                        className="w-full border rounded p-2"
-                    >
-                        <option value="">Select Payment Method</option>
-                        {paymentMethods.map(method => (
-                            <option key={method.id} value={method.id}>{method.name}</option>
-                        ))}
-                    </select>
+                    {paymentMethods.map((method) => (
+                        <label 
+                            key={method.id}
+                            className={`flex items-center gap-4 p-3 border rounded cursor-pointer transition 
+                                 ${selectedPayment === method.id ? "border-teal bg-teal/5" : "border-gray-300"}`}
+                        >
+                            <input 
+                                type="radio" 
+                                name="paymentMethod"
+                                value={method.id}
+                                onChange={() => setSelectedPayment(method.id)}
+                                className="w-5 h-5 accent-black"
+                            />
+                            <img src={method.imageUrl}
+                                alt={method.name}
+                                className="w-14 h-10 object-contain rounded bg-white"
+                                onError={(e) => (e.target.src = "/placeholder.jpg")}
+                            />
+                            <span className="font-medium">{method.name}</span>
+                        </label>
+                    ))}
                 </div>
 
+                {/* Confirm */}
                 <button
-                    onClick={handlePayment}
+                    onClick={createTransaction}
                     className={`bg-teal text-white px-6 py-2 rounded hover:bg-teal/80 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                     disabled={loading}
                 >
