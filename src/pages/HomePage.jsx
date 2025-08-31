@@ -5,7 +5,7 @@ import Banner from "../component/Banner";
 import Navbar from '../component/Navbar'
 import DestinationCard from "../component/DestinationsCard";
 import PromoSection from "./promos/PromoSection";
-import PopularSection from "./homesections/PopularSection";
+import PopularSection from "./homeSections/PopularSection";
 import FeaturedSection from "./destinations/FeaturedDestinationsSection";
 import TestimonialSection from "./homesections/TestimonialSection";
 import Footer from "../component/Footer";
