@@ -41,8 +41,8 @@ npm install
 ```
 
 ### 3. Setup environment variables
-```bash
 Create a .env file in the project root:
+```bash
 VITE_BASE_URL=https://travel-journal-api-bootcamp.do.dibimbing.id
 VITE_API_KEY=24405e01-fbc1-45a5-9f5a-be13afcd757c
 ```
