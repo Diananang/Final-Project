@@ -1,12 +1,58 @@
-# React + Vite
+# Roamly 🌍✈️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Roamly** is a travel website built to help users easily plan their holiday destinations.  
+It is designed to be user-friendly for everyone — from families to solo travelers.  
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
+- **Authentication**  
+  - User registration and login system  
+- **Promotions**  
+  - Browse special deals and promos  
+- **Destinations**  
+  - Explore popular and featured destinations  
+- **Transaction Flow**  
+  - Cart management (add, update, delete items)  
+  - Secure checkout and payment process  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+- **Frontend:** React + Vite  
+- **Styling:** Tailwind CSS  + Lucide Icons  
+- **State Management:** React Hooks  
+- **HTTP Client:** Axios  
+- **Notifications:** Sonner  
+- **Routing:** React Router DOM  
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/roamly.git
+cd roamly
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Setup environment variables
+```bash
+Create a .env file in the project root:
+VITE_BASE_URL=https://travel-journal-api-bootcamp.do.dibimbing.id
+VITE_API_KEY=24405e01-fbc1-45a5-9f5a-be13afcd757c
+```
+
+### 4. Run the development server
+```bash
+npm run dev
+The app will be available at http://localhost:5173
+```
+
+
+
