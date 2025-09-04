@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { toast} from 'sonner';
 import DestinationCard from "../../component/DestinationsCard";
 import Navbar from "../../component/Navbar";
+import Footer from "../../component/Footer";
 
 export default function AllDestinationsPage() {
     const [allDest, setAllDest] = useState([])
@@ -44,17 +45,17 @@ export default function AllDestinationsPage() {
     const currentData = allDest.slice((page - 1) * limit, page * limit);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen">
             <Navbar />
 
-            <div className="max-w-7xl mx-auto p-6 sm:p-12">
+            <div className="max-w-7xl  mx-auto px-6 sm:px-24 py-16">
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">All Destinations</h1>
 
                 {loading ? (
                 <p className="text-gray-500">Loading...</p>
                 ) : (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch">
                     {currentData.map(dest => (
                         <DestinationCard
                         key={dest.id}
@@ -87,6 +88,8 @@ export default function AllDestinationsPage() {
                 </>
                 )}
             </div>
+
+            <Footer />
         </div>
     )
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import axios from 'axios'
 import Navbar from "../../component/Navbar";
+import Footer from "../../component/Footer";
 
 export default function DetailPromoPage (){
     const [detailPromo, setDetailPromo] = useState({})
@@ -23,10 +24,14 @@ export default function DetailPromoPage (){
                 console.log(error);
             }
         }
+
+    const handleImageError = (e) => {
+        e.target.src = "/fallback.jpg";
+    };
     
-        useEffect(() => {
-            getDetailPromo();
-        },[id])
+    useEffect(() => {
+        getDetailPromo();
+    },[id])
 
     return (
         <div>
@@ -37,6 +42,7 @@ export default function DetailPromoPage (){
                     <img
                     src={detailPromo.imageUrl}
                     alt={detailPromo.title}
+                    onError={handleImageError}
                     className="w-full h-64 sm:h-80 object-cover"
                     />
                 )}
@@ -70,6 +76,8 @@ export default function DetailPromoPage (){
                 </div>
                 </div>
             </div>
+
+            <Footer />
         </div>
     )
 }

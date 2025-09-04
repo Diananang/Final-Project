@@ -27,23 +27,30 @@ export default function Navbar ({authOnly = false}) {
             >
             <nav className="flex justify-between items-center py-5 px-6 sm:px-10">
                 <Link
-                to="/"
-                className={`text-[26px] font-bold font-volkhov
-                    ${isHome && !authOnly ? "text-white" : "text-blueBlack"}`}
+                    to="/"
+                    className={`text-[26px] font-bold font-volkhov
+                        ${isHome && !authOnly ? "text-white" : "text-blueBlack"}`}
                 >
-                Roamly
+                    Roamly
                 </Link>
 
                 {!authOnly && (
                 <div className="hidden sm:flex gap-10 items-center font-mulish">
                     <ul
-                    className={`flex gap-[30px] text-[15px] font-semibold
-                        ${isHome ? "text-white" : "text-blueBlack"}`}
-                    >
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About us</Link></li>
-                    <li><Link to="/all-destinations">All Destinations</Link></li>
-                    <li><Link to="/cart"><ShoppingCart /></Link></li>
+                        className={`flex gap-[30px] text-[15px] font-semibold
+                            ${isHome ? "text-white" : "text-blueBlack"}`}
+                        >
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/about">About us</Link></li>
+                        <li><Link to="/all-destinations">All Destinations</Link></li>
+                        <li>
+                            {token ? (
+                                <Link to="/cart"><ShoppingCart /></Link>
+
+                            ) : (
+                                <Link to="/signin" state={{from: "/cart"}}><ShoppingCart /></Link>
+                            )}
+                        </li>
                     </ul>
 
                     {token ? (

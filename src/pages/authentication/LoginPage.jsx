@@ -12,7 +12,9 @@ export default function LoginPage(){
     const [password, setPassword] = useState('')
     const [isError, setIsError] = useState(false)
     const navigate = useNavigate()
+    
     const location = useLocation()
+    const from = location.state?.from || "/"
 
     const changeEmail = ((e) => setEmail(e.target.value))
     const changePass = ((e) => setPassword(e.target.value))
@@ -52,7 +54,7 @@ export default function LoginPage(){
             if (role === "admin") {
                 navigate("/admin", { replace: true })
             } else {
-                navigate("/", { replace: true })
+                navigate(from, { replace: true })
             }
         } catch (error) {
             console.log(error.response?.data.message);

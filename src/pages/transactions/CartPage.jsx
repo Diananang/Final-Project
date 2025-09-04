@@ -53,7 +53,7 @@ export default function CartPage() {
         }
       )
       console.log(res);
-      await getCarts()
+      setCarts(prev => prev.map(c => c.id === cartId ? {...c, quantity: newQuantity} : c))
     } catch (error) {
       console.log(error);
       toast.error("Failed to update Cart")

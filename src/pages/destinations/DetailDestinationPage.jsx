@@ -5,6 +5,7 @@ import DestinationCard from "../../component/DestinationsCard";
 import Navbar from "../../component/Navbar";
 import { Building2, DollarSign, MapPin, Wrench } from "lucide-react";
 import { toast } from "sonner";
+import Footer from "../../component/Footer";
 
 export default function DetailDestinationPage(){
     const [detailDest, setDetailDest] = useState({})
@@ -216,6 +217,8 @@ export default function DetailDestinationPage(){
                     </div>
                 </div>
             </div>
+            
+            <Footer />
         </div>
     )
 }

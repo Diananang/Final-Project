@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import Navbar from "../../component/Navbar"
-
+import Footer from "../../component/Footer"
 
 export default function AllPromosPage() {
     const [allPromos, setAllPromos] = useState([])
@@ -58,6 +57,8 @@ export default function AllPromosPage() {
                 ))}
                 </div>
             </div>
+
+            <Footer />
         </div>
     )
 }

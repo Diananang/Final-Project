@@ -45,7 +45,7 @@ export default function HomePage(){
             <Navbar />
             <Banner onSearch={handleSearch}/>
 
-            <div className="px-6 md:px-12 lg:px-24 space-y-16 mt-28 font-mulish">
+            <div className="px-6 sm:px-24 space-y-16 mt-28 font-mulish">
                 {isLoading && <p>Loading...</p>}
                 {!isLoading && searchResults.length > 0 && (
                     <div>
