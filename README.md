@@ -32,8 +32,7 @@ It is designed to be user-friendly for everyone — from families to solo travel
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/roamly.git
-cd roamly
+git clone https://github.com/Diananang/Final-Project.git
 ```
 
 ### 2. Install Dependencies
@@ -51,8 +50,8 @@ VITE_API_KEY=24405e01-fbc1-45a5-9f5a-be13afcd757c
 ### 4. Run the development server
 ```bash
 npm run dev
-The app will be available at http://localhost:5173
 ```
+The app will be available at http://localhost:5173
 
 
 
