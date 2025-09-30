@@ -1,45 +1,64 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+const testimonials = [
+    {
+        id: 1,
+        message: "Best travel booking experience ever! Super easy and fast.",
+        name: "Jane Doe"
+    },
+    {
+        id: 2,
+        message: "The destinations were amazing, everything was well organized.",
+        name: "John Smith"
+    },
+    {
+        id: 3,
+        message: "Customer service was really helpful, I’ll book again soon!",
+        name: "Emily Johnson"
+    },
+    {
+        id: 4,
+        message: "Affordable prices and unforgettable trips. Highly recommend!",
+        name: "Michael Brown"
+    },
+    {
+        id: 5,
+        message: "The app is so smooth to use, my holiday planning is stress-free now.",
+        name: "Sophia Lee"
+    },
+]
+
 export default function TestimonialSection(){
-    const testimonials = [
-        {
-            id: 1,
-            message: "Best travel booking experience ever! Super easy and fast.",
-            name: "Jane Doe"
-        },
-        {
-            id: 2,
-            message: "The destinations were amazing, everything was well organized.",
-            name: "John Smith"
-        },
-        {
-            id: 3,
-            message: "Customer service was really helpful, I’ll book again soon!",
-            name: "Emily Johnson"
-        },
-        {
-            id: 4,
-            message: "Affordable prices and unforgettable trips. Highly recommend!",
-            name: "Michael Brown"
-        },
-        {
-            id: 5,
-            message: "The app is so smooth to use, my holiday planning is stress-free now.",
-            name: "Sophia Lee"
-        },
-    ]
-
     const scrollRef = useRef(null);
+    const [direction, setDirection] = useState("right")
 
-    const scroll = (direction) => {
+    const scroll = (dir) => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
-                left: direction == 'left' ? -300 : 300,
+                left: dir == 'left' ? -300 : 300,
                 behavior: 'smooth',
             });
         }
     }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(scrollRef.current) {
+                const { scrollLeft, scrollWidth, clientWidth} = scrollRef.current
+
+                if (scrollLeft + clientWidth >= scrollWidth - 5) {
+                    setDirection("left")
+                } else if(scrollLeft <= 0) {
+                    setDirection("right")
+                }
+            }
+
+            scroll(direction);
+        }, 3000)
+
+        return () => clearInterval(interval)
+    },[direction])
 
     return (
         <section className="flex flex-col gap-6">
@@ -71,12 +90,12 @@ export default function TestimonialSection(){
 
             <div
                 ref={scrollRef}
-                className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-4sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-x-visible"
+                className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-4"
             >
                 {testimonials.map((t) => (
                 <div
                     key={t.id}
-                    className=" bg-white p-6 rounded-lg shadow min-w-[280px] sm:min-w-0 flex-shrink-0 "
+                    className="bg-white p-6 rounded-lg shadow w-[280px] flex-shrink-0"
                 >
                     <p className="italic">{t.message}</p>
                     <p className="mt-2 font-bold">{t.name}</p>

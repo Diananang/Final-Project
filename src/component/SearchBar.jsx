@@ -15,13 +15,13 @@ export default function SearchBar({onSearch}){
                     type="text" 
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Search anything..."
+                    placeholder="Search destinations..."
                     className="text-sm text-gray-700 mt-1 rounded-md px-3 py-2 border border-gray-300"
                 />
             </div>
             <button 
                 onClick={handleSearch}
-                className="ml-4 bg-yellow rounded-[40px] font-extrabold text-blueBlack text-sm sm:text-base py-2 px-6 sm:py-4 sm:px-12 shadow-lg shadow-yellow/50"
+                className="ml-4 bg-yellow rounded-[40px] font-extrabold text-blueBlack text-sm sm:text-base py-2 px-6 sm:px-8 shadow-lg shadow-yellow/50"
             >
                 Search
             </button>

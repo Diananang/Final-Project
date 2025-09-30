@@ -13,9 +13,11 @@ import Footer from "../component/Footer";
 export default function HomePage(){
     const [searchResults, setSearchResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
+    const [keyword , setKeyword] = useState("")
 
-    const handleSearch = async (keyword) => {
+    const handleSearch = async (searchTerm) => {
         setIsLoading(true);
+        setKeyword(searchTerm)
         try {
             const res = await axios.get(
                 `${import.meta.env.VITE_BASE_URL}/api/v1/activities`,
@@ -28,18 +30,18 @@ export default function HomePage(){
 
             const filtered = res.data.data.filter (
                 (item) => 
-                    item.title.toLowerCase().includes(keyword.toLowerCase()) ||
-                    item.city.toLowerCase().includes(keyword.toLowerCase()) ||
-                    item.province.toLowerCase().includes(keyword.toLowerCase())
+                    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.province.toLowerCase().includes(searchTerm.toLowerCase())
             )
             setSearchResults(filtered)
         } catch (error) {
             console.log(error);
-            toast.error('No result')
         } finally {
             setIsLoading(false);
         }
     }
+
     return (
         <div className="relative w-full min-h-screen bg-white">
             <Navbar />
@@ -47,6 +49,7 @@ export default function HomePage(){
 
             <div className="px-6 sm:px-24 space-y-16 mt-28 font-mulish">
                 {isLoading && <p>Loading...</p>}
+
                 {!isLoading && searchResults.length > 0 && (
                     <div>
                         <h2 className="text-2xl font-bold mb-6">
@@ -60,7 +63,13 @@ export default function HomePage(){
                     </div>
                 )}
 
-                {searchResults.length === 0 && !isLoading && (
+                {!isLoading && searchResults.length === 0 && keyword !== "" && (
+                    <p className="text-center text-gray-500 font-semibold">
+                        No result found
+                    </p>
+                )}
+
+                {searchResults.length === 0 && !isLoading && keyword === "" && (
                     <>
                         <PromoSection />
                         <PopularSection />
