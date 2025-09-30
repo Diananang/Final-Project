@@ -21,7 +21,7 @@ export default function SearchBar({onSearch}){
             </div>
             <button 
                 onClick={handleSearch}
-                className="ml-4 bg-yellow rounded-[40px] font-extrabold text-blueBlack text-base py-4 px-12 shadow-lg shadow-yellow/50"
+                className="ml-4 bg-yellow rounded-[40px] font-extrabold text-blueBlack text-sm sm:text-base py-2 px-6 sm:py-4 sm:px-12 shadow-lg shadow-yellow/50"
             >
                 Search
             </button>
