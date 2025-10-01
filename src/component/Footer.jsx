@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 export default function Footer(){
     return (
-        <footer className="p-6 md:px-12 lg:px-24 space-y-20 mt-8 bg-gray-900 text-white">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-6">
+        <footer className="p-6 sm:px-24 space-y-20 mt-8 bg-gray-900 text-white">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-6">
                 <div>
                     <h3 className="font-bold text-lg mb-2">Roamly</h3>
                     <p>Explore the world with ease.</p>

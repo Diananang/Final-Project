@@ -2,9 +2,9 @@ import Navbar from "../../component/Navbar";
 import image from '../../assets/hero.jpg'
 import { useState } from "react";
 import Footer from "../../component/Footer";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';
+import { registerApi } from "../../api/auth";
 
 
 export default function RegisterPage(){
@@ -37,24 +37,9 @@ export default function RegisterPage(){
 
         setIsError(false)
 
-        const payload = {
-            name,
-            email,
-            password,
-            passwordRepeat,
-            role
-        }
-
         try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/register`, payload, 
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY
-                    }
-                }
-            )
-            console.log(res);
+            const res = await registerApi(name, email, password, passwordRepeat, role)
+
             toast.success("Sign up Successfully!")
             navigate('/signin')
         } catch (error) {
