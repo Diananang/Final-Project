@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast} from 'sonner';
 import { loginApi } from "../../api/auth";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, EyeOff } from "lucide-react";
 
 
 export default function LoginPage(){
@@ -98,7 +98,7 @@ export default function LoginPage(){
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                             >
-                                {showPassword ? <EyeClosed size={24} /> : <Eye size={24}/>}
+                                {showPassword ? <EyeOff size={24} /> : <Eye size={24}/>}
                             </button>
                         </div>
                         {isError && !password.trim() && (
