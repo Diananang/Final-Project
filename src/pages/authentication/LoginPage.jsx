@@ -60,7 +60,7 @@ export default function LoginPage(){
     return(
         <div>
             <Navbar authOnly = {true}/>
-            <div className="flex flex-col sm:flex-row w-dvw sm:w-fit h-full mx-auto justify-center items-center font-mulish shadow-lg rounded-lg">
+            <div className="flex flex-col sm:flex-row w-full sm:w-fit h-full mx-auto mt-6 justify-center items-center font-mulish rounded-lg">
                 <img 
                     src={image} 
                     alt="Login Image" 

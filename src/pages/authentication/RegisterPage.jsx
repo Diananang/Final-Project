@@ -51,17 +51,17 @@ export default function RegisterPage(){
     return(
         <div>
             <Navbar authOnly = {true}/>
-            <div className="flex flex-row-reverse w-fit h-full mx-auto justify-center items-center font-mulish gap-8 rounded-lg">
+            <div className="flex flex-col sm:flex-row-reverse w-full sm:w-fit h-full mx-auto mt-6 justify-center items-center font-mulish gap-8 rounded-lg overflow-hidden">
                 <img 
                     src={image} 
                     alt="Login Image" 
-                    className="w-[576px] h-[662px] object-cover object-center rounded-r-lg"
+                    className="w-full h-[300px] sm:w-[576px] sm:h-[662px] object-cover object-center"
                 />
-                <div className="flex flex-col w-[544px] h-[662px] justify-center items-center ml-6">
-                    <h2 className="font-volkhov text-[32px] font-semibold text-yellow">CREATE AN ACCOUNT</h2>
-                    <p className="text-base font-medium text-[#6E7074] mb-8">By creating an account you agree to our Privacy policy and Terms of use.</p>
-                    <div className="flex flex-col min-w-[400px]">
-                        <div className="flex gap-4">
+                <div className="flex flex-col w-[544px] h-[662px] justify-center items-center sm:ml-6">
+                    <h2 className="font-volkhov text-2xl sm:text-[32px] font-bold text-yellow">CREATE AN ACCOUNT</h2>
+                    <p className="text-sm sm:text-base font-semibold text-[#6E7074] mb-8 w-[300px] sm:w-[400px] text-center">By creating an account you agree to our Privacy policy and Terms of use.</p>
+                    <div className="flex flex-col w-[300px] sm:w-[500px]">
+                        <div className="flex sm:flex-row flex-col sm:gap-4 gap-0">
                             <input 
                                 type="text" 
                                 placeholder="Enter Username"
