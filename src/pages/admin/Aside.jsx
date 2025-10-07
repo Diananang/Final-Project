@@ -16,7 +16,7 @@ export default function Aside ({menus, activeMenu, onMenuClick }) {
             </div>
 
             <aside
-                className={`bg-white shadow-md w-64 p-4 text-blueBlack fixed sm:static top-0 left-0 h-full sm:h-auto transform sm:transform-none transition-transform duration-300 z-50
+                className={`bg-white shadow-md w-64 p-4 text-blueBlack fixed sm:static top-0 left-0 h-full transform sm:transform-none transition-transform duration-300 z-50
                     ${isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"}`}
             >
                 <h2 className="text-3xl font-bold">Roamly</h2>

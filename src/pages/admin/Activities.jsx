@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
 import { PenBox, Trash2, PlusCircle } from "lucide-react";
 import {toast} from 'sonner'
-
+import { createActivity, deleteActivity, getAllActivities, updateActivity } from "../../api/activityApi";
+import ActivityModal from "../../component/ActivityModal";
+import { uploadImage } from "../../api/uploadImageApi";
 
 export default function Activities () {
     const [activity, setActivity] = useState([])
@@ -19,57 +20,34 @@ export default function Activities () {
         preview: "",
         location_maps: "",
         categoryId: "",
+        price: "",
+        price_discount: "",
+        rating: "",
+        total_reviews: "",
+        facilities: "",
+        address: "",
+        province: "",
+        city: "",
     });
 
-
-    const getAllActivities = async () => {
+    const loadActivities = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/activities`,
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY,
-                    }
-                }
-            )
-            console.log(res);
-            setActivity(res.data.data)
+            const data = await getAllActivities()
+            setActivity(data)
         } catch (error) {
             console.log(error);
             toast.error("Failed to fetch Activities")
         }
     }
 
-    const uploadImage = async (file) => {
-        if (!file) return null;
-        const formData = new FormData()
-        formData.append("image", file)
-
-        try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/upload-image`,
-                formData,
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY,
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        "Content-Type": "multipart/form-data",
-                    }
-                }
-            )
-            console.log(res);
-            return res.data.url
-        } catch (error) {
-            console.log(error);
-            toast.error("Failed to upload image")
-            return null;
-        }
-    }
-
     const handleInputChange = (e) => {
         const {name, value, files} = e.target;
         if(files){
-            setForm(prev => ({...prev, image: files[0], preview: URL.createObjectURL(files[0])}))
+            setForm(prev => ({
+                ...prev, 
+                image: files[0], 
+                preview: URL.createObjectURL(files[0])
+            }))
         } else {
             setForm(prev => ({...prev, [name] : value}))
         }
@@ -83,76 +61,33 @@ export default function Activities () {
             preview: "",
             location_maps: "",
             categoryId: "",
+            editingId: null
         });
         setEditingActivity(null);
         setModalOpen(false);
     };
 
-    const openEditModal = (activity) => {
-        setEditingActivity(activity);
+    const openEditModal = (act) => {
+        setEditingActivity(act);
         setForm({
-            title: activity.title,
-            description: activity.description,
+            title: act.title,
+            description: act.description,
             imageUrls: null,
-            preview: activity.imageUrls,
-            location_maps: activity.location_maps,
+            preview: Array.isArray(act.imageUrls) ? act.imageUrls[0] : act.imageUrls,
+            location_maps: act.location_maps,
             categoryId: act.categoryId,
+            editingId: act.id
         });
         setModalOpen(true);
     };
-
-    const createActivity = async (payload) => {
-        try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/create-activity`,
-                payload,
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY,
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            )
-            console.log(res);
-            toast.success("Activity created successfully");
-        } catch (error) {
-            console.log(error);
-            toast.error("Failed to create activity");
-        }
-    }
-
-    const updateActivity = async (activityId, payload) => {
-        try {
-            const res = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/v1/update-activity/${activityId}`,
-                payload,
-                {
-                    headers: {
-                        apikey: import.meta.env.VITE_API_KEY,
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            )
-            console.log(res);
-            toast.success("Activity updated successfully");
-        } catch (error) {
-            console.log(error);
-            toast.error("Failed to update activity");
-        }
-    }
     
     const handleDelete = async (activityId) => {
         if (!confirm("Do you want to delete this activity?")) return;
 
         try {
-            await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/delete-activity/${activityId}`, {
-                headers: {
-                    apikey: import.meta.env.VITE_API_KEY,
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-            toast.success("Activity deleted");
-            getAllActivities();
+            await deleteActivity(activityId)
+            toast.success("Activity deleted succesfully");
+            loadActivities();
         } catch (error) {
             console.log(error);
             toast.error("Failed to delete activity");
@@ -163,28 +98,44 @@ export default function Activities () {
         setLoading(true)
 
         try {
-            let imageUrls = form.preview;
+            let imageUrls = [];
             if (form.image) {
                 const uploadedUrl = await uploadImage(form.image);
-                if (uploadedUrl) imageUrls = uploadedUrl;
+                if (uploadedUrl) imageUrls.push(uploadedUrl);
+            }else if (form.preview){
+                if(Array.isArray(form.preview)){
+                    imageUrls = form.preview;
+                }else {
+                    imageUrls = [form.preview]
+                }
             }
 
             const payload = {
-                title: form.title,
-                description: form.description,
-                imageUrls,
-                location_maps: form.location_maps,
+                title: form.title || "Untitled",
+                description: form.description || "No description provided",
+                imageUrls: typeof imageUrls === "string" ? imageUrls : imageUrls[0],
+                location_maps: form.location_maps || "-",
                 categoryId: form.categoryId,
+                price: Number(form.price) || 0,
+                price_discount: Number(form.price_discount) || 0,
+                rating: Number(form.rating) || 0,
+                total_reviews: Number(form.total_reviews) || 0,
+                facilities: form.facilities || "-",
+                address: form.address || "-",
+                province: form.province || "-",
+                city: form.city || "-",
             }
 
-            if (editingActivity) {
-                await updateActivity(editingActivity.id, payload)
+            if (form.editingId) {
+                await updateActivity(form.editingId, payload)
+                toast.success("Activity updated succesfully")
             }else{
                 await createActivity(payload)
+                toast.success("Activity created successfully")
             }
 
             resetForm();
-            getAllActivities();
+            loadActivities();
         } catch (error) {
             console.log(error);
             toast.error("Failed to save activity");
@@ -193,13 +144,12 @@ export default function Activities () {
         }
     };
 
-
     const handleImageError = (e) => {
         e.target.src = "/placeholder.jpg";
     };
 
     useEffect(() => {
-        getAllActivities(page)
+        loadActivities(page)
     },[page])
 
     const totalPages = Math.ceil(activity.length / limit);
@@ -229,7 +179,7 @@ export default function Activities () {
                             className="relative bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                         >
                         <img
-                            src={act.imageUrls}
+                            src={Array.isArray(act.imageUrls) ? act.imageUrls[0] : act.imageUrls}
                             alt={act.title}
                             onError={handleImageError}
                             className="w-full h-40 object-cover"
@@ -255,6 +205,7 @@ export default function Activities () {
                 </div>
             )}
 
+            {/* Pagination */}
             <div className="flex justify-center mt-8 gap-2">
                 <button
                     disabled={page === 1}
@@ -275,68 +226,15 @@ export default function Activities () {
                 </button>
             </div>
 
-            {modalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl border border-gray-100">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-700">
-                        {editingActivity ? "Edit Activity" : "Add Activity"}
-                        </h3>
-                        <div className="space-y-4">
-                        <input
-                            type="text"
-                            name="name"
-                            value={form.title}
-                            onChange={handleInputChange}
-                            placeholder="Nama aktivitas"
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
-                        />
-                        <textarea
-                            name="description"
-                            value={form.description}
-                            onChange={handleInputChange}
-                            placeholder="Deskripsi aktivitas"
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
-                        />
-                        <input
-                            type="text"
-                            name="categoryId"
-                            value={form.categoryId}
-                            onChange={handleInputChange}
-                            placeholder="ID kategori"
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
-                        />
-                        <input
-                            type="file"
-                            name="image"
-                            onChange={handleInputChange}
-                            className="w-full"
-                        />
-                        {form.preview && (
-                            <img
-                            src={form.preview}
-                            alt="Preview"
-                            className="w-full h-32 object-cover rounded border border-gray-200"
-                            />
-                        )}
-                        </div>
-                        <div className="mt-6 flex justify-end gap-3">
-                        <button
-                            onClick={resetForm}
-                            className="px-4 py-2 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            disabled={loading}
-                            className="px-4 py-2 bg-teal text-white rounded hover:bg-teal/80 disabled:opacity-50"
-                        >
-                            {loading ? "Saving..." : "Save"}
-                        </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Modal */}
+            <ActivityModal 
+                isOpen={modalOpen}
+                onClose={resetForm}
+                onSubmit={handleSubmit}
+                form={form}
+                onChange={handleInputChange}
+                loading={loading}
+            />
         </div>
     )
 }
